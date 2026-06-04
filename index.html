@@ -7,12 +7,15 @@
     <style>
         :root { --primary: #27ae60; --bg: #f8f9fa; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .card { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        h1 { color: var(--primary); text-align: center; margin-bottom: 20px; font-size: 1.6em; }
-        .hotline { background: #fff3cd; color: #856404; padding: 12px; border-radius: 12px; text-align: center; font-weight: bold; margin-bottom: 20px; border: 1px solid #ffeeba; }
-        input, select { width: 100%; padding: 14px; margin-top: 5px; border: 1px solid #eee; border-radius: 12px; box-sizing: border-box; background: #f9f9f9; }
-        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .time-box { background: #f0fdf4; border: 2px dashed var(--primary); padding: 15px; border-radius: 15px; text-align: center; margin-top: 10px; }
+        .card { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        h1 { color: var(--primary); text-align: center; margin-bottom: 5px; font-size: 1.5em; }
+        .hotline { background: #fff3cd; color: #856404; padding: 10px; border-radius: 12px; text-align: center; font-weight: bold; margin-bottom: 20px; font-size: 0.9em; }
+        .box { background: #fdfdfd; border: 1px solid #eee; padding: 15px; border-radius: 15px; margin-bottom: 15px; }
+        input, select { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        /* Khung giờ chọn nhanh */
+        .time-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+        .chip { padding: 8px 12px; background: #e8f5e9; border: 1px solid var(--primary); border-radius: 20px; font-size: 0.85em; cursor: pointer; color: var(--primary); }
         .list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0; }
     </style>
 </head>
@@ -20,27 +23,33 @@
 
 <div class="card">
     <h1>🏸 PHÚC AN BADMINTON 🏸</h1>
-    <div class="hotline">☎ Hủy/Đổi sân: 0395.936.865</div>
+    <div class="hotline">☎ Hủy/Đổi sân gọi: 0395.936.865</div>
 
-    <div class="input-group">
-        <label>THÔNG TIN KHÁCH</label>
-        <input type="text" id="hoTen" placeholder="Họ và Tên">
+    <!-- Đăng ký thông tin -->
+    <div class="box">
+        <h3 style="margin-top:0;">ĐĂNG KÝ THÔNG TIN</h3>
+        <input type="text" id="hoTen" placeholder="Họ và tên khách">
         <input type="tel" id="sdt" placeholder="Số điện thoại">
         <button onclick="luuThongTin()" style="background:#34495e;">Lưu thông tin</button>
     </div>
 
-    <div style="margin-top:20px;">
-        <label>Chọn Sân & Ngày</label>
-        <select id="san" onchange="loadLich()"><option>Sân số 1</option><option>Sân số 2</option></select>
-        <input type="date" id="ngay" onchange="loadLich()">
-    </div>
+    <!-- Chọn lịch -->
+    <label>Chọn Sân & Ngày</label>
+    <select id="san" onchange="loadLich()"><option>Sân số 1</option><option>Sân số 2</option></select>
+    <input type="date" id="ngay" onchange="loadLich()">
 
-    <div class="time-box">
-        <label>KHUNG GIỜ ĐẶT</label>
-        <input type="text" id="thoiGian" placeholder="Ví dụ: 17:00 - 18:30" style="text-align:center; font-size:1.2em; font-weight:bold; color:var(--primary);">
+    <label>Chọn khung giờ nhanh:</label>
+    <div class="time-chips">
+        <span class="chip" onclick="chonGio('05:00-06:00')">05-06h</span>
+        <span class="chip" onclick="chonGio('06:00-07:00')">06-07h</span>
+        <span class="chip" onclick="chonGio('17:00-18:00')">17-18h</span>
+        <span class="chip" onclick="chonGio('18:00-19:00')">18-19h</span>
+        <span class="chip" onclick="chonGio('19:00-20:00')">19-20h</span>
+        <span class="chip" onclick="chonGio('20:00-21:00')">20-21h</span>
     </div>
+    <input type="text" id="thoiGian" placeholder="Hoặc nhập khung giờ tùy ý...">
     
-    <button onclick="datSan()" style="margin-top:20px;">XÁC NHẬN ĐẶT SÂN</button>
+    <button onclick="datSan()">XÁC NHẬN ĐẶT SÂN</button>
 
     <h3 style="margin-top:30px;">Lịch đã đặt:</h3>
     <div id="danhSach"></div>
@@ -53,22 +62,25 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    function chonGio(g) { document.getElementById('thoiGian').value = g; }
+    
     function luuThongTin() {
         localStorage.setItem('user', JSON.stringify({hoTen: document.getElementById('hoTen').value, sdt: document.getElementById('sdt').value}));
-        alert("Đã lưu thông tin!");
+        alert("Thông tin khách đã được lưu!");
     }
 
     function datSan() {
         const user = JSON.parse(localStorage.getItem('user'));
         const thoiGian = document.getElementById('thoiGian').value;
         if(!user || !user.hoTen) return alert("Vui lòng lưu thông tin trước!");
-        if(!thoiGian) return alert("Bạn chưa nhập giờ đặt!");
+        if(!thoiGian) return alert("Vui lòng chọn hoặc nhập khung giờ!");
+        
         db.ref('lichDatCauLong').push({
             ten: user.hoTen, sdt: user.sdt,
             san: document.getElementById('san').value,
             ngay: document.getElementById('ngay').value,
             thoiGian: thoiGian
-        }).then(() => alert("Đặt thành công!"));
+        }).then(() => alert("Đặt sân thành công!"));
     }
 
     function loadLich() {
@@ -80,10 +92,10 @@
                 let l = c.val();
                 if(l.san == san && l.ngay == ngay) {
                     html += `<div class="list-item"><span><b>${l.thoiGian}</b> | ${l.ten}</span>
-                             <button style="background:#e74c3c; width:auto; padding:6px 10px; border-radius:8px;" onclick="huy('${c.key}')">Hủy</button></div>`;
+                             <button style="background:#e74c3c; width:auto; padding:6px 12px; border-radius:8px;" onclick="huy('${c.key}')">Hủy</button></div>`;
                 }
             });
-            document.getElementById('danhSach').innerHTML = html || "<p style='text-align:center; color:#999;'>Sân còn trống</p>";
+            document.getElementById('danhSach').innerHTML = html || "<p style='text-align:center; color:#999;'>Sân đang trống</p>";
         });
     }
 
