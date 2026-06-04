@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HỆ THỐNG ĐẶT SÂN PHÚC AN BADMINTON</title>
+    <style>
+        :root {
+            --mau-chinh: #2ecc71;
+            --mau-phu: #27ae60;
+            --mau-toi: #2c3e50;
+            --mau-sang: #ecf0f1;
+            --mau-xanh-duong: #3498db;
+            --mau-do: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f6fa;
+            margin: 0;
+            padding: 20px;
+            color: var(--mau-toi);
+        }
+
+        .khung-chua {
+            max-width: 650px;
+            margin: 0 auto 20px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: var(--mau-phu);
+            margin-top: 0;
+        }
+
+        .o-nhap {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--mau-chinh);
+        }
+
+        .nhom-nut {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--mau-chinh);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--mau-phu);
+        }
+
+        button.nut-phu {
+            background-color: var(--mau-xanh-duong);
+        }
+
+        button.nut-phu:hover {
+            background-color: #2980b9;
+        }
+
+        button.nut-dang-xuat {
+            background-color: #7f8c8d;
+            padding: 5px 10px;
+            font-size: 14px;
+            width: auto;
+            display: inline-block;
+        }
+
+        .an-di {
+            display: none;
+        }
+
+        .thong-bao-dang-nhap {
+            background-color: #e8f8f5;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border: 1px solid var(--mau-chinh);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .danh-sach-gio {
+            margin-top: 20px;
+        }
+
+        .o-gio {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            font-size: 15px;
+            border: 1px solid #ddd;
+            transition: all 0.2s;
+        }
+
+        .o-gio.trong {
+            background-color: #ffffff;
+            color: #333;
+            border-left: 6px solid var(--mau-chinh);
+        }
+
+        .o-gio.da-dat {
+            background-color: #fdf2f2;
+            color: var(--mau-do);
+            border-left: 6px solid var(--mau-do);
+        }
+
+        .nut-dat-nhanh {
+            background-color: var(--mau-chinh);
+            color: white;
+            padding: 6px 12px;
+            font-size: 13px;
+            width: auto;
+            border-radius: 4px;
+        }
+        .nut-dat-nhanh:hover { background-color: var(--mau-phu); }
+
+        .nut-huy-admin {
+            background-color: var(--mau-do);
+            color: white;
+            padding: 4px 8px;
+            font-size: 12px;
+            width: auto;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+        .nut-huy-admin:hover { background-color: #c0392b; }
+
+        .chu-thich {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .cham-tron {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="khungTaiKhoan" class="khung-chua">
+    <div id="formDangNhapPhan">
+        <h2>🔐 Đăng Nhập Thành Viên</h2>
+        <form id="formDangNhap">
+            <div class="o-nhap">
+                <label>Số điện thoại:</label>
+                <input type="tel" id="dnSdt" required placeholder="Nhập số điện thoại">
+            </div>
+            <div class="o-nhap">
+                <label>Mật khẩu:</label>
+                <input type="password" id="dnMatKhau" required placeholder="Nhập mật khẩu">
+            </div>
+            <button type="submit">Đăng Nhập</button>
+            <p style="text-align:center; margin-bottom:0; margin-top: 15px;">Chưa có tài khoản? <a href="#" onclick="chuyenForm('dangky')">Đăng ký ngay</a></p>
+        </form>
+    </div>
+
+    <div id="formDangKyPhan" class="an-di">
+        <h2>📝 Đăng Ký Tài Khoản</h2>
+        <form id="formDangKy">
+            <div class="o-nhap">
+                <label>Họ và Tên:</label>
+                <input type="text" id="dkTen" required placeholder="Nhập tên của bạn">
+            </div>
+            <div class="o-nhap">
+                <label>Số điện thoại:</label>
+                <input type="tel" id="dkSdt" required placeholder="Nhập số điện thoại để đăng nhập">
+            </div>
+            <div class="o-nhap">
+                <label>Mật khẩu tự chọn:</label>
+                <input type="password" id="dkMatKhau" required placeholder="Tạo mật khẩu">
+            </div>
+            <div class="nhom-nut">
+                <button type="submit">Xác Nhận Đăng Ký</button>
+                <button type="button" class="nut-phu" onclick="chuyenForm('dangnhap')">Quay lại</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="khung-chua">
+    <div id="thongBaoUser" class="thong-bao-dang-nhap an-di">
+        <span>Xin chào: <b id="tenKhachHienTai"></b> (<span id="sdtKhachHienTai"></span>)</span>
+        <button class="nut-dang-xuat" onclick="dangXuat()">Đăng xuất</button>
+    </div>
+
+    <h1>🏸 Tra Cứu & Đặt Sân Cầu Lông</h1>
+    
+    <div class="o-nhap">
+        <label>1. Chọn Sân muốn xem:</label>
+        <select id="chonSan" onchange="capNhatGiaoDienLich()">
+            <option value="Sân số 1">Sân số 1</option>
+            <option value="Sân số 2">Sân số 2</option>
+        </select>
+    </div>
+
+    <div class="o-nhap">
+        <label>2. Chọn Ngày muốn xem:</label>
+        <input type="date" id="chonNgay" onchange="capNhatGiaoDienLich()" required>
+    </div>
+</div>
+
+<div class="khung-chua">
+    <h3>📊 Tình Trạng Lịch Sân</h3>
+    
+    <div class="chu-thich">
+        <span><span class="cham-tron" style="background-color: #fff; border:1px solid #ccc;"></span>Lịch trống (Trắng)</span>
+        <span><span class="cham-tron" style="background-color: var(--mau-do);"></span>Đã được đặt (Đỏ)</span>
+    </div>
+
+    <div id="vungHienThiLich" class="danh-sach-gio">
+        </div>
+</div>
+
+<script>
+    const MAT_KHAU_ADMIN = "PhucAn2026$";
+
+    // Khởi tạo và đọc bộ nhớ từ máy tính một cách chính xác
+    let danhSachTaiKhoan = JSON.parse(localStorage.getItem('dstkCauLong')) || [];
+    let danhSachDatSan = JSON.parse(localStorage.getItem('lichDatCauLong')) || [];
+    let userHienTai = JSON.parse(localStorage.getItem('userHienTaiCauLong')) || null;
+
+    // Cài đặt ngày mặc định là ngày hôm nay khi vừa mở web
+    const homNay = new Date().toISOString().split('T')[0];
+    document.getElementById('chonNgay').value = homNay;
+
+    // Danh sách khung giờ hoạt động
+    const cacKhungGioHoatDong = [
+        "05:00 - 06:00", "06:00 - 07:00", "07:00 - 08:00", "08:00 - 09:00",
+        "09:00 - 10:00", "10:00 - 11:00", "15:00 - 16:00", "16:00 - 17:00",
+        "17:00 - 18:00", "18:00 - 19:00", "19:00 - 20:00", "20:00 - 21:00", "21:00 - 22:00"
+    ];
+
+    // Hàm cập nhật trạng thái bảng lịch Trắng / Đỏ
+    function capNhatGiaoDienLich() {
+        const sanChon = document.getElementById('chonSan').value;
+        const ngayChon = document.getElementById('chonNgay').value;
+        const vungLich = document.getElementById('vungHienThiLich');
+        
+        vungLich.innerHTML = '';
+
+        if (!ngayChon) {
+            vungLich.innerHTML = '<p class="tin-nhan-trong">Vui lòng chọn ngày để xem lịch sân.</p>';
+            return;
+        }
+
+        cacKhungGioHoatDong.forEach(khungGio => {
+            const thongTinDat = danhSachDatSan.find(l => l.san === sanChon && l.ngay === ngayChon && l.khungGio === khungGio);
+            const theGio = document.createElement('div');
+            
+            if (thongTinDat) {
+                theGio.className = "o-gio da-dat";
+                theGio.innerHTML = `
+                    <div>
+                        ⏰ <b>${khungGio}</b> — 🛑 Đã đặt: <b>${thongTinDat.ten}</b> (${thongTinDat.sdt})
+                    </div>
+                    <button class="nut-huy-admin" onclick="xoaLichDat('${sanChon}', '${ngayChon}', '${khungGio}')">Hủy (Admin)</button>
+                `;
+            } else {
+                theGio.className = "o-gio trong";
+                theGio.innerHTML = `
+                    <div>⏰ <b>${khungGio}</b> — 🟢 Sân trống</div>
+                    ${userHienTai ? `<button class="nut-dat-nhanh" onclick="datSanNhanh('${khungGio}')">Đặt Sân</button>` : '<small style="color:#7f8c8d;">Đăng nhập để đặt</small>'}
+                `;
+            }
+            vungLich.appendChild(theGio);
+        });
+    }
+
+    // Đặt sân nhanh
+    window.datSanNhanh = function(khungGio) {
+        if (!userHienTai) {
+            alert('⚠️ Bạn cần đăng nhập tài khoản trước khi đặt sân!');
+            return;
+        }
+
+        const san = document.getElementById('chonSan').value;
+        const ngay = document.getElementById('chonNgay').value;
+
+        if(confirm(`Bạn muốn xác nhận đặt [${san}] ngày [${ngay}] vào khung giờ [${khungGio}] không?`)) {
+            danhSachDatSan.push({
+                ten: userHienTai.ten,
+                sdt: userHienTai.sdt,
+                san,
+                ngay,
+                khungGio
+            });
+            localStorage.setItem('lichDatCauLong', JSON.stringify(danhSachDatSan));
+            capNhatGiaoDienLich();
+            alert('🎉 Đặt sân thành công!');
+        }
+    }
+
+    // Xóa lịch dành cho Admin
+    window.xoaLichDat = function(san, ngay, khungGio) {
+        const matKhauNhap = prompt("🔐 Tính năng này cần quyền Quản trị viên.\nVui lòng nhập mật khẩu để giải phóng lịch sân:");
+        
+        if (matKhauNhap === null) return;
+
+        if (matKhauNhap === MAT_KHAU_ADMIN) {
+            if(confirm('Mật khẩu đúng! Bạn có chắc chắn muốn hủy lịch đặt này không?')) {
+                const viTri = danhSachDatSan.findIndex(l => l.san === san && l.ngay === ngay && l.khungGio === khungGio);
+                if (viTri !== -1) {
+                    danhSachDatSan.splice(viTri, 1);
+                    localStorage.setItem('lichDatCauLong', JSON.stringify(danhSachDatSan));
+                    capNhatGiaoDienLich();
+                    alert('🗑️ Đã xóa lịch và giải phóng sân trống thành công!');
+                }
+            }
+        } else {
+            alert('❌ Sai mật khẩu quản trị!');
+        }
+    }
+
+    // Chuyển đổi giao diện Đăng nhập / Đăng ký
+    function chuyenForm(loai) {
+        if(loai === 'dangky') {
+            document.getElementById('formDangNhapPhan').classList.add('an-di');
+            document.getElementById('formDangKyPhan').classList.remove('an-di');
+        } else {
+            document.getElementById('formDangKyPhan').classList.add('an-di');
+            document.getElementById('formDangNhapPhan').classList.remove('an-di');
+        }
+    }
+
+    // Xử lý ĐĂNG KÝ (Đã sửa lỗi đồng bộ bộ nhớ)
+    document.getElementById('formDangKy').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const ten = document.getElementById('dkTen').value.trim();
+        const sdt = document.getElementById('dkSdt').value.trim();
+        const matKhau = document.getElementById('dkMatKhau').value;
+
+        // Cập nhật lại mảng mới nhất từ localStorage trước khi check trùng
+        danhSachTaiKhoan = JSON.parse(localStorage.getItem('dstkCauLong')) || [];
+
+        if(danhSachTaiKhoan.some(tk => tk.sdt === sdt)) {
+            alert('⚠️ Số điện thoại này đã được ký tài khoản rồi!');
+            return;
+        }
+
+        danhSachTaiKhoan.push({ ten, sdt, matKhau });
+        localStorage.setItem('dstkCauLong', JSON.stringify(danhSachTaiKhoan));
+        
+        alert('🎉 Đăng ký tài khoản thành công! Hãy dùng SĐT và mật khẩu vừa tạo để đăng nhập.');
+        document.getElementById('formDangKy').reset();
+        chuyenForm('dangnhap');
+    });
+
+    // Xử lý ĐĂNG NHẬP
+    document.getElementById('formDangNhap').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const sdt = document.getElementById('dnSdt').value.trim();
+        const matKhau = document.getElementById('dnMatKhau').value;
+
+        // Đọc lại danh sách tài khoản mới nhất tránh bị lệch dữ liệu cũ
+        danhSachTaiKhoan = JSON.parse(localStorage.getItem('dstkCauLong')) || [];
+
+        const taiKhoan = danhSachTaiKhoan.find(tk => tk.sdt === sdt && tk.matKhau === matKhau);
+
+        if(taiKhoan) {
+            userHienTai = taiKhoan;
+            localStorage.setItem('userHienTaiCauLong', JSON.stringify(userHienTai));
+            kiemTraTrangThaiDangNhap();
+            capNhatGiaoDienLich();
+            alert('🔓 Đăng nhập thành công!');
+        } else {
+            alert('❌ Sai số điện thoại hoặc mật khẩu! Vui lòng kiểm tra lại hoặc Đăng ký tài khoản mới.');
+        }
+    });
+
+    // Đăng xuất
+    function dangXuat() {
+        userHienTai = null;
+        localStorage.removeItem('userHienTaiCauLong');
+        kiemTraTrangThaiDangNhap();
+        capNhatGiaoDienLich();
+    }
+
+    // Kiểm tra trạng thái hiển thị
+    function kiemTraTrangThaiDangNhap() {
+        if(userHienTai) {
+            document.getElementById('khungTaiKhoan').classList.add('an-di');
+            document.getElementById('thongBaoUser').classList.remove('an-di');
+            document.getElementById('tenKhachHienTai').innerText = userHienTai.ten;
+            document.getElementById('sdtKhachHienTai').innerText = userHienTai.sdt;
+        } else {
+            document.getElementById('khungTaiKhoan').classList.remove('an-di');
+            document.getElementById('thongBaoUser').classList.add('an-di');
+            document.getElementById('formDangNhap').reset();
+        }
+    }
+
+    // Khởi chạy hệ thống ban đầu
+    kiemTraTrangThaiDangNhap();
+    capNhatGiaoDienLich();
+</script>
+
+</body>
+</html>
