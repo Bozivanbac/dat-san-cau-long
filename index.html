@@ -195,7 +195,7 @@
                 <input type="password" id="dnMatKhau" required placeholder="Nhập mật khẩu">
             </div>
             <button type="submit">Đăng Nhập</button>
-            <p style="text-align:center; margin-bottom:0; margin-top: 15px;">Chưa có tài khoản? <a href="#" onclick="chuyenForm('dangky')">Đăng ký ngay</a></p>
+            <p style="text-align:center; margin-bottom:0; margin-top: 15px;">Chưa có tài khoản? <a href="#" onclick="window.chuyenForm('dangky')">Đăng ký ngay</a></p>
         </form>
     </div>
 
@@ -216,7 +216,7 @@
             </div>
             <div class="nhom-nut">
                 <button type="submit">Xác Nhận Đăng Ký</button>
-                <button type="button" class="nut-phu" onclick="chuyenForm('dangnhap')">Quay lại</button>
+                <button type="button" class="nut-phu" onclick="window.chuyenForm('dangnhap')">Quay lại</button>
             </div>
         </form>
     </div>
@@ -225,14 +225,14 @@
 <div class="khung-chua">
     <div id="thongBaoUser" class="thong-bao-dang-nhap an-di">
         <span>Xin chào: <b id="tenKhachHienTai"></b> (<span id="sdtKhachHienTai"></span>)</span>
-        <button class="nut-dang-xuat" onclick="dangXuat()">Đăng xuất</button>
+        <button class="nut-dang-xuat" onclick="window.dangXuat()">Đăng xuất</button>
     </div>
 
     <h1>🏸 Tra Cứu & Đặt Sân Cầu Lông</h1>
     
     <div class="o-nhap">
         <label>1. Chọn Sân muốn xem:</label>
-        <select id="chonSan" onchange="capNhatGiaoDienLich()">
+        <select id="chonSan" onchange="window.capNhatGiaoDienLich()">
             <option value="Sân số 1">Sân số 1</option>
             <option value="Sân số 2">Sân số 2</option>
         </select>
@@ -240,7 +240,7 @@
 
     <div class="o-nhap">
         <label>2. Chọn Ngày muốn xem:</label>
-        <input type="date" id="chonNgay" onchange="capNhatGiaoDienLich()" required>
+        <input type="date" id="chonNgay" onchange="window.capNhatGiaoDienLich()" required>
     </div>
 </div>
 
@@ -255,12 +255,10 @@
     <div id="vungHienThiLich" class="danh-sach-gio"></div>
 </div>
 
-<!-- NHÚNG THƯ VIỆN SDK FIREBASE (V8) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-    // THÔNG SỐ LIÊN KẾT ĐƯỢC LẤY CHÍNH XÁC TỪ DỰ ÁN CỦA BẠN
     const firebaseConfig = {
         apiKey: "AIzaSyAs-wZ-Fm49pTHeZ15T8bZc9S9oFm6XvM4",
         authDomain: "phuc-an-badminton-1ab18.firebaseapp.com",
@@ -271,28 +269,27 @@
         appId: "1:569618037341:web:d236ef0d8efda08b9f1d07"
     };
 
-    // Khởi tạo Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
     const MAT_KHAU_ADMIN = "PhucAn2026$";
 
-    // Khởi tạo tài khoản local
     let danhSachTaiKhoan = JSON.parse(localStorage.getItem('dstkCauLong')) || [];
     let userHienTai = JSON.parse(localStorage.getItem('userHienTaiCauLong')) || null;
     let danhSachDatSan = [];
 
-    // Cài đặt ngày mặc định hôm nay
     const homNay = new Date().toISOString().split('T')[0];
     document.getElementById('chonNgay').value = homNay;
 
+    // DANH SÁCH KHUNG GIỜ ĐÃ ĐƯỢC THÊM CÁC CA ĐUÔI :30 (1h30, 4h30, v.v...)
     const cacKhungGioHoatDong = [
-        "05:00 - 06:00", "06:00 - 07:00", "07:00 - 08:00", "08:00 - 09:00",
-        "09:00 - 10:00", "10:00 - 11:00", "15:00 - 16:00", "16:00 - 17:00",
-        "17:00 - 18:00", "18:00 - 19:00", "19:00 - 20:00", "20:00 - 21:00", "21:00 - 22:00"
+        "05:00 - 06:00", "05:30 - 07:00", "06:00 - 07:00", "07:00 - 08:00", 
+        "08:00 - 09:00", "09:00 - 10:00", "10:00 - 11:00", "15:00 - 16:00", 
+        "16:00 - 17:00", "16:30 - 18:00", "17:00 - 18:00", "17:30 - 19:00", 
+        "18:00 - 19:00", "19:00 - 20:00", "19:30 - 21:00", "20:00 - 21:00", 
+        "21:00 - 22:00"
     ];
 
-    // LẮNG NGHE ĐỒNG BỘ REALTIME TỪ FIREBASE CLOUD
     db.ref('lichDatCauLong').on('value', (snapshot) => {
         const data = snapshot.val();
         danhSachDatSan = [];
@@ -307,7 +304,6 @@
         window.capNhatGiaoDienLich();
     });
 
-    // ĐƯA CÁC HÀM RA PHẠM VI WINDOW ĐỂ TRÁNH LỖI TRÊN GITHUB PAGES
     window.capNhatGiaoDienLich = function() {
         const sanChon = document.getElementById('chonSan').value;
         const ngayChon = document.getElementById('chonNgay').value;
@@ -330,20 +326,19 @@
                     <div>
                         ⏰ <b>${khungGio}</b> — 🛑 Đã đặt: <b>${thongTinDat.ten}</b> (${thongTinDat.sdt})
                     </div>
-                    <button class="nut-huy-admin" onclick="xoaLichDatTheoId('${thongTinDat.idFirebase}')">Hủy (Admin)</button>
+                    <button class="nut-huy-admin" onclick="window.xoaLichDatTheoId('${thongTinDat.idFirebase}')">Hủy (Admin)</button>
                 `;
             } else {
                 theGio.className = "o-gio trong";
                 theGio.innerHTML = `
                     <div>⏰ <b>${khungGio}</b> — 🟢 Sân trống</div>
-                    ${userHienTai ? `<button class="nut-dat-nhanh" onclick="datSanNhanh('${khungGio}')">Đặt Sân</button>` : '<small style="color:#7f8c8d;">Đăng nhập để đặt</small>'}
+                    ${userHienTai ? `<button class="nut-dat-nhanh" onclick="window.datSanNhanh('${khungGio}')">Đặt Sân</button>` : '<small style="color:#7f8c8d;">Đăng nhập để đặt</small>'}
                 `;
             }
             vungLich.appendChild(theGio);
         });
     }
 
-    // Đặt sân gửi thẳng lên đám mây Firebase
     window.datSanNhanh = function(khungGio) {
         if (!userHienTai) {
             alert('⚠️ Bạn cần đăng nhập tài khoản trước khi đặt sân!');
@@ -361,23 +356,22 @@
                 ngay,
                 khungGio
             }).then(() => {
-                alert('🎉 Đặt sân thành công!');
+                alert('🎉 Đặt sân thành công trên hệ thống trực tuyến!');
             }).catch((error) => {
-                alert('❌ Lỗi lưu dữ liệu: ' + error.message);
+                alert('❌ Lỗi không thể lưu dữ liệu: ' + error.message);
             });
         }
     }
 
-    // Hủy đặt sân dành cho Admin
     window.xoaLichDatTheoId = function(idFirebase) {
         const matKhauNhap = prompt("🔐 Tính năng này cần quyền Quản trị viên.\nVui lòng nhập mật khẩu để giải phóng lịch sân:");
         
         if (matKhauNhap === null) return;
 
-        if (matKhauNhap === MAT_KHAU_ADMIN) {
-            if(confirm('Mật khẩu đúng! Bạn có chắc chắn muốn hủy và giải phóng lịch đặt này không?')) {
+        if (matKhauNhap === PhucAn2026$) {
+            if(confirm('Mật khẩu đúng! Bạn có chắc chắn muốn hủy và giải phóng lịch đặt này trên đám mây không?')) {
                 db.ref('lichDatCauLong/' + idFirebase).remove().then(() => {
-                    alert('🗑️ Đã giải phóng sân trống thành công!');
+                    alert('🗑️ Đã hủy lịch và giải phóng sân trống thành công!');
                 });
             }
         } else {
@@ -385,7 +379,6 @@
         }
     }
 
-    // Chuyển đổi giao diện Đăng nhập / Đăng ký
     window.chuyenForm = function(loai) {
         if(loai === 'dangky') {
             document.getElementById('formDangNhapPhan').classList.add('an-di');
@@ -396,16 +389,14 @@
         }
     }
 
-    // Đăng xuất hoàn toàn tài khoản
     window.dangXuat = function() {
         userHienTai = null;
         localStorage.removeItem('userHienTaiCauLong');
         kiemTraTrangThaiDangNhap();
         window.capNhatGiaoDienLich();
-        alert('🔒 Đã đăng xuất tài khoản!');
+        alert('🔒 Đã đăng xuất tài khoản thành công!');
     }
 
-    // Kiểm tra trạng thái hiển thị khu vực đăng nhập
     function kiemTraTrangThaiDangNhap() {
         if(userHienTai) {
             document.getElementById('khungTaiKhoan').classList.add('an-di');
@@ -419,7 +410,6 @@
         }
     }
 
-    // Xử lý sự kiện Submit Đăng ký
     document.getElementById('formDangKy').addEventListener('submit', function(e) {
         e.preventDefault();
         const ten = document.getElementById('dkTen').value.trim();
@@ -441,7 +431,6 @@
         window.chuyenForm('dangnhap');
     });
 
-    // Xử lý sự kiện Submit Đăng nhập
     document.getElementById('formDangNhap').addEventListener('submit', function(e) {
         e.preventDefault();
         const sdt = document.getElementById('dnSdt').value.trim();
@@ -461,7 +450,6 @@
         }
     });
 
-    // Khởi chạy kiểm tra ban đầu
     kiemTraTrangThaiDangNhap();
 </script>
 
