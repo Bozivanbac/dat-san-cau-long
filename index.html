@@ -3,623 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HỆ THỐNG ĐẶT SÂN PHÚC AN BADMINTON</title>
+    <title>HỆ THỐNG ĐẶT SÂN PHÚC AN</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
-        :root {
-            --mau-chinh: #2ecc71;
-            --mau-phu: #27ae60;
-            --mau-toi: #2c3e50;
-            --mau-sang: #ecf0f1;
-            --mau-xanh-duong: #3498db;
-            --mau-do: #e74c3c;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f6fa;
-            margin: 0;
-            padding: 20px;
-            color: var(--mau-toi);
-        }
-
-        .khung-chua {
-            max-width: 650px;
-            margin: 0 auto 20px auto;
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        h1, h2, h3 {
-            text-align: center;
-            color: var(--mau-phu);
-            margin-top: 0;
-            margin-bottom: 5px;
-        }
-
-        .khung-hotline {
-            background-color: #fff3cd;
-            border: 1px solid #ffeeba;
-            color: #856404;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 500;
-            margin-bottom: 20px;
-            font-size: 15px;
-        }
-
-        .khung-hotline a {
-            color: var(--mau-do);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 17px;
-        }
-
-        .o-nhap {
-            margin-bottom: 15px;
-        }
-
-        .nhom-o-nhap {
-            display: flex;
-            gap: 15px;
-        }
-
-        .nhom-o-nhap .o-nhap {
-            flex: 1;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--mau-chinh);
-        }
-
-        .nhom-nut {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--mau-chinh);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        button:hover {
-            background-color: var(--mau-phu);
-        }
-
-        button.nut-phu {
-            background-color: var(--mau-xanh-duong);
-        }
-
-        button.nut-phu:hover {
-            background-color: #2980b9;
-        }
-
-        button.nut-dang-xuat {
-            background-color: #7f8c8d;
-            padding: 5px 10px;
-            font-size: 14px;
-            width: auto;
-            display: inline-block;
-        }
-
-        .an-di {
-            display: none;
-        }
-
-        .thong-bao-dang-nhap {
-            background-color: #e8f8f5;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            border: 1px solid var(--mau-chinh);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .danh-sach-gio {
-            margin-top: 20px;
-        }
-
-        .o-gio {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .o-gio.da-dat {
-            background-color: #fdf2f2;
-            color: var(--mau-do);
-            border-left: 6px solid var(--mau-do);
-            border-color: #f5c6cb;
-        }
-
-        .nut-huy-admin {
-            background-color: var(--mau-do);
-            color: white;
-            padding: 8px 14px;
-            font-size: 13px;
-            width: auto;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-        .nut-huy-admin:hover { background-color: #c0392b; }
-
-        .tin-nhan-trong {
-            text-align: center;
-            color: #27ae60;
-            font-weight: 500;
-            background-color: #e8f8f5;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px dashed var(--mau-chinh);
-            margin: 0;
-        }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .input-group { margin-bottom: 15px; }
+        select, input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        .item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; }
+        .btn-huy { background: #e74c3c; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+        .btn-huy:hover { background: #c0392b; }
     </style>
 </head>
 <body>
 
-<div id="khungTaiKhoan" class="khung-chua">
-    <div id="formDangNhapPhan">
-        <h2>🔐 Đăng Nhập Thành Viên</h2>
-        <form id="formDangNhap">
-            <div class="o-nhap">
-                <label>Số điện thoại:</label>
-                <input type="tel" id="dnSdt" required placeholder="Nhập số điện thoại">
-            </div>
-            <div class="o-nhap">
-                <label>Mật khẩu:</label>
-                <input type="password" id="dnMatKhau" required placeholder="Nhập mật khẩu">
-            </div>
-            <button type="submit">Đăng Nhập</button>
-            <p style="text-align:center; margin-bottom:0; margin-top: 15px;">Chưa có tài khoản? <a href="#" onclick="window.chuyenForm('dangky')">Đăng ký ngay</a></p>
-        </form>
-    </div>
-
-    <div id="formDangKyPhan" class="an-di">
-        <h2>📝 Đăng Ký Tài Khoản</h2>
-        <form id="formDangKy">
-            <div class="o-nhap">
-                <label>Họ và Tên:</label>
-                <input type="text" id="dkTen" required placeholder="Nhập tên của bạn">
-            </div>
-            <div class="o-nhap">
-                <label>Số điện thoại:</label>
-                <input type="tel" id="dkSdt" required placeholder="Nhập số điện thoại để đăng nhập">
-            </div>
-            <div class="o-nhap">
-                <label>Mật khẩu tự chọn:</label>
-                <input type="password" id="dkMatKhau" required placeholder="Tạo mật khẩu">
-            </div>
-            <div class="nhom-nut">
-                <button type="submit">Xác Nhận Đăng Ký</button>
-                <button type="button" class="nut-phu" onclick="window.chuyenForm('dangnhap')">Quay lại</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="khung-chua">
-    <div id="thongBaoUser" class="thong-bao-dang-nhap an-di">
-        <span>Xin chào: <b id="tenKhachHienTai"></b> (<span id="sdtKhachHienTai"></span>)</span>
-        <button class="nut-dang-xuat" onclick="window.dangXuat()">Đăng xuất</button>
-    </div>
-
-    <h1>🏸 PHÚC AN BADMINTON</h1>
-    
-    <div class="khung-hotline">
-        ⚠️ Gặp sự cố hoặc cần hủy/đổi sân? Vui lòng gọi Hotline: <a href="tel:0395936865">0395 936 865</a>
-    </div>
-    
-    <div class="o-nhap">
-        <label>1. Chọn Sân muốn xem:</label>
-        <select id="chonSan" onchange="window.capNhatGiaoDienLich()">
+<div class="container">
+    <h2 style="text-align:center; color: #27ae60;">LỊCH ĐẶT SÂN</h2>
+    <div class="input-group">
+        <label>Chọn Sân:</label>
+        <select id="chonSan" onchange="renderLich()">
             <option value="Sân số 1">Sân số 1</option>
             <option value="Sân số 2">Sân số 2</option>
         </select>
     </div>
-
-    <div class="o-nhap">
-        <label>2. Chọn Ngày muốn xem:</label>
-        <input type="date" id="chonNgay" onchange="window.capNhatGiaoDienLich()" required>
+    <div class="input-group">
+        <label>Chọn Ngày:</label>
+        <input type="date" id="chonNgay" onchange="renderLich()">
     </div>
-
-    <!-- KHUNG ĐẶT GIỜ LINH HOẠT CHUẨN TIẾNG VIỆT -->
-    <div id="khungDatGioLinhHoat" class="an-di" style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ccc;">
-        <h3 style="text-align: left; color: var(--mau-toi); font-size: 16px; margin-bottom: 15px;">➕ Đặt giờ theo ý muốn của bạn:</h3>
-        
-        <div class="nhom-o-nhap">
-            <div class="o-nhap">
-                <label style="font-size: 14px; color:#27ae60;">Giờ bắt đầu:</label>
-                <select id="gioBatDau" required></select>
-            </div>
-            <div class="o-nhap">
-                <label style="font-size: 14px; color:#e74c3c;">Giờ kết thúc:</label>
-                <select id="gioKetThuc" required></select>
-            </div>
-        </div>
-        <button type="button" onclick="window.xuLyDatSanLinhHoat()">Xác Nhận Đặt Khung Giờ Này</button>
-    </div>
+    <div id="danhSachLich"></div>
 </div>
-
-<div class="khung-chua">
-    <h3>📊 Tình Trạng Lịch Sân (Khung giờ đã đặt)</h3>
-    <div id="vungHienThiLich" class="danh-sach-gio"></div>
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
+    // Cấu hình Firebase
     const firebaseConfig = {
-        apiKey: "AIzaSyAs-wZ-Fm49pTHeZ15T8bZc9S9oFm6XvM4",
-        authDomain: "phuc-an-badminton-1ab18.firebaseapp.com",
-        databaseURL: "https://phuc-an-badminton-1ab18-default-rtdb.firebaseio.com",
-        projectId: "phuc-an-badminton-1ab18",
-        storageBucket: "phuc-an-badminton-1ab18.appspot.com",
-        messagingSenderId: "569618037341",
-        appId: "1:569618037341:web:d236ef0d8efda08b9f1d07"
+        databaseURL: "https://phuc-an-badminton-1ab18-default-rtdb.firebaseio.com"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const MAT_KHAU_ADMIN = "PhucAn2026$";
+    let dataFirebase = [];
 
-    let danhSachTaiKhoan = JSON.parse(localStorage.getItem('dstkCauLong')) || [];
-    let userHienTai = JSON.parse(localStorage.getItem('userHienTaiCauLong')) || null;
-    let danhSachDatSan = [];
-
-    // Lấy ngày hiện tại chuẩn giờ Việt Nam VN
-    const d = new Date();
-    const tzOffset = d.getTimezoneOffset() * 60000;
-    const localISOTime = (new Date(d.getTime() - tzOffset)).toISOString().split('T')[0];
-    document.getElementById('chonNgay').value = localISOTime;
-
-    // Tạo danh sách giờ tiếng Việt (Sáng/Chiều/Tối)
-    function khoiTaoBoChonGio() {
-        const selectBatDau = document.getElementById('gioBatDau');
-        const selectKetThuc = document.getElementById('gioKetThuc');
-        
-        selectBatDau.innerHTML = '<option value="">-- Chọn giờ đi --</option>';
-        selectKetThuc.innerHTML = '<option value="">-- Chọn giờ về --</option>';
-
-        for (let h = 5; h <= 22; h++) {
-            for (let m = 0; m < 60; m += 15) {
-                if (h === 22 && m > 0) break;
-                
-                let chuoiPhut = m === 0 ? '00' : m;
-                let chuoiGio = h < 10 ? '0' + h : h;
-                let thoiGianHienThi = `${chuoiGio}:${chuoiPhut}`;
-                
-                let buoi = h < 12 ? "Sáng" : (h < 18 ? "Chiều" : "Tối");
-                let optionText = `${thoiGianHienThi} (${buoi})`;
-
-                selectBatDau.innerHTML += `<option value="${thoiGianHienThi}">${optionText}</option>`;
-                selectKetThuc.innerHTML += `<option value="${thoiGianHienThi}">${optionText}</option>`;
-            }
-        }
-    }
-    khoiTaoBoChonGio();
-
-    // Nhận dữ liệu Realtime từ Firebase
+    // Tải dữ liệu từ Firebase
     db.ref('lichDatCauLong').on('value', (snapshot) => {
-        const data = snapshot.val();
-        danhSachDatSan = [];
-        if (data) {
-            Object.keys(data).forEach(key => {
-                danhSachDatSan.push({
-                    idFirebase: key,
-                    ...data[key]
-                });
-            });
-        }
-        window.capNhatGiaoDienLich();
+        dataFirebase = [];
+        snapshot.forEach((child) => {
+            // Lưu cả key (ID) của Firebase vào object
+            dataFirebase.push({ id: child.key, ...child.val() });
+        });
+        renderLich();
     });
 
-    function thanhPhut(chuoiGio) {
-        if(!chuoiGio) return 0;
-        const parts = chuoiGio.split(':');
-        if(parts.length < 2) return 0;
-        return parseInt(parts[0]) * 60 + parseInt(parts[1]);
-    }
-
-    // HIỂN THỊ DANH SÁCH LỊCH SÂN ĐÃ ĐẶT VÀ TƯƠNG THÍCH MỌI ĐỊNH DẠNG
-    window.capNhatGiaoDienLich = function() {
-        const sanChon = document.getElementById('chonSan').value;
-        const ngayChon = document.getElementById('chonNgay').value;
-        const vungLich = document.getElementById('vungHienThiLich');
-        
-        vungLich.innerHTML = '';
-
-        if (!ngayChon) {
-            vungLich.innerHTML = '<p style="text-align:center;color:#7f8c8d;">Vui lòng chọn ngày để kiểm tra lịch.</p>';
-            return;
-        }
-
-        const lichTrongNgay = danhSachDatSan.filter(l => l.san === sanChon && l.ngay === ngayChon);
-
-        // Chuẩn hóa dữ liệu tương thích ngược
-        lichTrongNgay.forEach(l => {
-            if(l.khungGio && (!l.gioBatDau || !l.gioKetThuc)) {
-                const doiTuongGio = l.khungGio.split('-');
-                l.gioBatDau = doiTuongGio[0].trim();
-                l.gioKetThuc = doiTuongGio[1].trim();
-            }
-        });
-
-        lichTrongNgay.sort((a, b) => thanhPhut(a.gioBatDau) - thanhPhut(b.gioBatDau));
-
-        if (lichTrongNgay.length === 0) {
-            vungLich.innerHTML = '<p class="tin-nhan-trong">🟢 Sân đang trống lịch! Bạn có thể chọn đặt bất kỳ giờ nào tùy ý.</p>';
-            return;
-        }
-
-        lichTrongNgay.forEach((lich, index) => {
-            if(!lich.gioBatDau || !lich.gioKetThuc) return;
-
-            const theGio = document.createElement('div');
-            theGio.className = "o-gio da-dat";
-            
-            let gBd = parseInt(lich.gioBatDau.split(':')[0]);
-            let gKt = parseInt(lich.gioKetThuc.split(':')[0]);
-            let bBd = gBd < 12 ? "Sáng" : (gBd < 18 ? "Chiều" : "Tối");
-            let bKt = gKt < 12 ? "Sáng" : (gKt < 18 ? "Chiều" : "Tối");
-
-            const thamSoAnToan = encodeURIComponent(JSON.stringify({
-                idFirebase: lich.idFirebase || "",
-                ten: lich.ten,
-                sdt: lich.sdt,
-                gioBatDau: lich.gioBatDau,
-                gioKetThuc: lich.gioKetThuc,
-                san: lich.san,
-                ngay: lich.ngay
-            }));
-
-            theGio.innerHTML = `
-                <div>
-                    ⏰ <b>${lich.gioBatDau} (${bBd}) - ${lich.gioKetThuc} (${bKt})</b> — 🛑 Đã đặt: <b>${lich.ten}</b> (${lich.sdt})
-                </div>
-                <button class="nut-huy-admin" onclick="window.xuLyXoaLichTuyTuyetDoi('${thamSoAnToan}')">Hủy lịch</button>
-            `;
-            vungLich.appendChild(theGio);
-        });
-    }
-
-    window.xuLyDatSanLinhHoat = function() {
-        if (!userHienTai) {
-            alert('⚠️ Bạn cần đăng nhập tài khoản trước khi đặt sân!');
-            return;
-        }
-
+    // Hiển thị lịch
+    function renderLich() {
         const san = document.getElementById('chonSan').value;
         const ngay = document.getElementById('chonNgay').value;
-        const gioBatDau = document.getElementById('gioBatDau').value;
-        const gioKetThuc = document.getElementById('gioKetThuc').value;
+        const container = document.getElementById('danhSachLich');
+        container.innerHTML = '';
 
-        if (!gioBatDau || !gioKetThuc) {
-            alert('⚠️ Vui lòng chọn đầy đủ cả Giờ bắt đầu và Giờ kết thúc!');
-            return;
-        }
+        const filterData = dataFirebase.filter(item => item.san === san && item.ngay === ngay);
 
-        const phutBatDau = thanhPhut(gioBatDau);
-        const phutKetThuc = thanhPhut(gioKetThuc);
-
-        if (phutBatDau >= phutKetThuc) {
-            alert('⚠️ Lỗi: Giờ kết thúc bắt buộc phải lớn hơn Giờ bắt đầu!');
-            return;
-        }
-
-        const biTrungLich = danhSachDatSan.some(lich => {
-            if (lich.san !== san || lich.ngay !== ngay) return false;
-            
-            let lGioBatDau = lich.gioBatDau;
-            let lGioKetThuc = lich.gioKetThuc;
-            if(lich.khungGio && (!lGioBatDau || !lGioKetThuc)) {
-                const doiTuongGio = lich.khungGio.split('-');
-                lGioBatDau = doiTuongGio[0].trim();
-                lGioKetThuc = doiTuongGio[1].trim();
-            }
-
-            const lPhutBatDau = thanhPhut(lGioBatDau);
-            const lPhutKetThuc = thanhPhut(lGioKetThuc);
-
-            return (phutBatDau < lPhutKetThuc && phutKetThuc > lPhutBatDau);
-        });
-
-        if (biTrungLich) {
-            alert('❌ Khung giờ bạn vừa chọn đã bị TRÙNG hoặc CHỒNG LÊN một lịch đặt khác hiển thị bên dưới! Vui lòng chọn giờ khác.');
-            return;
-        }
-
-        if (confirm(`Xác nhận đặt [${san}] ngày [${ngay}] từ [${gioBatDau} đến ${gioKetThuc}]?`)) {
-            db.ref('lichDatCauLong').push({
-                ten: userHienTai.ten,
-                sdt: userHienTai.sdt,
-                san,
-                ngay,
-                gioBatDau,
-                gioKetThuc
-            }).then(() => {
-                alert('🎉 Đặt sân thành công!');
-                document.getElementById('gioBatDau').value = '';
-                document.getElementById('gioKetThuc').value = '';
-            }).catch((error) => {
-                alert('❌ Lỗi lưu dữ liệu: ' + error.message);
+        if (filterData.length === 0) {
+            container.innerHTML = '<p style="text-align:center;">Chưa có lịch đặt.</p>';
+        } else {
+            filterData.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.innerHTML = `
+                    <span><b>${item.khungGio || 'N/A'}</b> - ${item.ten} (${item.sdt})</span>
+                    <button class="btn-huy" onclick="xuLyHuy('${item.id}')">Hủy</button>
+                `;
+                container.appendChild(div);
             });
         }
     }
 
-    // 🔥 VÁ LỖI FIREBASE NÂNG CAO: Thay remove() bằng cơ chế ghi đè null (set(null)) để lách qua luật bảo mật Rules
-    window.xuLyXoaSanPhucAn = function(chuoiMaHoa) {
-    const duLieu = JSON.parse(decodeURIComponent(chuoiMaHoa));
-    
-    // Kiểm tra mật khẩu Admin
-    const mk = prompt("🔐 Vui lòng nhập mật khẩu để hủy lịch:");
-    if (mk !== PhucAn2026$) {
-        alert("❌ Mật khẩu không đúng!");
-        return;
-    }
+    // HÀM HỦY SÂN CỐ ĐỊNH (Xóa trực tiếp theo ID)
+    window.xuLyHuy = function(id) {
+        const mk = prompt("Nhập mật khẩu quản trị để hủy:");
+        if (mk !== "PhucAn2026$") {
+            alert("Mật khẩu sai!");
+            return;
+        }
 
-    if (!confirm("Bạn chắc chắn muốn hủy lịch này?")) return;
-
-    // QUAN TRỌNG: Gọi đường dẫn chính xác tới node đó và set null
-    // Nếu bạn có ID Firebase, dùng trực tiếp ID đó
-    if (duLieu.idFirebase) {
-        db.ref('lichDatCauLong/' + duLieu.idFirebase).set(null)
+        // Dùng ID đã được truyền vào hàm để xóa chính xác node đó
+        db.ref('lichDatCauLong/' + id).remove()
         .then(() => {
-            alert("🗑️ Đã xóa thành công!");
+            alert("Đã hủy lịch thành công!");
         })
-        .catch((err) => {
-            alert("❌ Lỗi: " + err.message);
-        });
-    } else {
-        alert("❌ Lỗi: Không tìm thấy ID để xóa.");
-    }
-}
-    // CƠ CHẾ DỰ PHÒNG SIÊU CẤP: Quét thô dữ liệu và dập null các bản ghi trùng khớp
-    function kichHoatCoCheXoaDuPhongSieuCap(lichCanXoa) {
-        db.ref('lichDatCauLong').once('value', (snapshot) => {
-            const data = snapshot.val();
-            if (!data) {
-                alert("❌ Không tìm thấy dữ liệu trên hệ thống.");
-                return;
-            }
-
-            let flagDaXoa = false;
-            Object.keys(data).forEach(key => {
-                const item = data[key];
-                
-                if (item.ten === lichCanXoa.ten && 
-                    item.sdt === lichCanXoa.sdt && 
-                    item.ngay === lichCanXoa.ngay && 
-                    item.san === lichCanXoa.san) {
-                    
-                    // Thực hiện đặt giá trị của phần tử này về null để biến mất vĩnh viễn
-                    db.ref('lichDatCauLong/' + key).set(null);
-                    flagDaXoa = true;
-                }
-            });
-
-            if (flagDaXoa) {
-                alert('🗑️ Thành công: Sân đã được giải phóng bằng lệnh ghi đè dự phòng!');
-            } else {
-                alert('❌ Lỗi hệ thống: Firebase từ chối quyền xóa dữ liệu. Vui lòng kiểm tra Rules Database.');
-            }
+        .catch(err => {
+            alert("Lỗi: " + err.message);
         });
     }
 
-    window.chuyenForm = function(loai) {
-        if(loai === 'dangky') {
-            document.getElementById('formDangNhapPhan').classList.add('an-di');
-            document.getElementById('formDangKyPhan').classList.remove('an-di');
-        } else {
-            document.getElementById('formDangKyPhan').classList.add('an-di');
-            document.getElementById('formDangNhapPhan').classList.remove('an-di');
-        }
-    }
-
-    window.dangXuat = function() {
-        userHienTai = null;
-        localStorage.removeItem('userHienTaiCauLong');
-        kiemTraTrangThaiDangNhap();
-        window.capNhatGiaoDienLich();
-        alert('🔒 Đã đăng xuất tài khoản thành công!');
-    }
-
-    function kiemTraTrangThaiDangNhap() {
-        if(userHienTai) {
-            document.getElementById('khungTaiKhoan').classList.add('an-di');
-            document.getElementById('thongBaoUser').classList.remove('an-di');
-            document.getElementById('khungDatGioLinhHoat').classList.remove('an-di');
-            document.getElementById('tenKhachHienTai').innerText = userHienTai.ten;
-            document.getElementById('sdtKhachHienTai').innerText = userHienTai.sdt;
-        } else {
-            document.getElementById('khungTaiKhoan').classList.remove('an-di');
-            document.getElementById('thongBaoUser').classList.add('an-di');
-            document.getElementById('khungDatGioLinhHoat').classList.add('an-di');
-            document.getElementById('formDangNhap').reset();
-        }
-    }
-
-    document.getElementById('formDangKy').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const ten = document.getElementById('dkTen').value.trim();
-        const sdt = document.getElementById('dkSdt').value.trim();
-        const matKhau = document.getElementById('dkMatKhau').value;
-
-        danhSachTaiKhoan = JSON.parse(localStorage.getItem('dstkCauLong')) || [];
-
-        if(danhSachTaiKhoan.some(tk => tk.sdt === sdt)) {
-            alert('⚠️ Số điện thoại này đã được ký tài khoản rồi!');
-            return;
-        }
-
-        danhSachTaiKhoan.push({ ten, sdt, matKhau });
-        localStorage.setItem('dstkCauLong', JSON.stringify(danhSachTaiKhoan));
-        
-        alert('🎉 Đăng ký thành công! Hãy đăng nhập để tiếp tục.');
-        document.getElementById('formDangKy').reset();
-        window.chuyenForm('dangnhap');
-    });
-
-    document.getElementById('formDangNhap').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const sdt = document.getElementById('dnSdt').value.trim();
-        const matKhau = document.getElementById('dnMatKhau').value;
-
-        danhSachTaiKhoan = JSON.parse(localStorage.getItem('dstkCauLong')) || [];
-        const taiKhoan = danhSachTaiKhoan.find(tk => tk.sdt === sdt && tk.matKhau === matKhau);
-
-        if(taiKhoan) {
-            userHienTai = taiKhoan;
-            localStorage.setItem('userHienTaiCauLong', JSON.stringify(userHienTai));
-            kiemTraTrangThaiDangNhap();
-            window.capNhatGiaoDienLich();
-            alert('🔓 Đăng nhập thành công!');
-        } else {
-            alert('❌ Sai số điện thoại hoặc mật khẩu!');
-        }
-    });
-
-    kiemTraTrangThaiDangNhap();
+    // Thiết lập ngày mặc định là hôm nay
+    document.getElementById('chonNgay').valueAsDate = new Date();
 </script>
-
 </body>
 </html>
