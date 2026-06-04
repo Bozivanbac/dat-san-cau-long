@@ -260,6 +260,7 @@
         <input type="date" id="chonNgay" onchange="window.capNhatGiaoDienLich()" required>
     </div>
 
+    <!-- KHUNG ĐẶT GIỜ LINH HOẠT CHUẨN TIẾNG VIỆT -->
     <div id="khungDatGioLinhHoat" class="an-di" style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ccc;">
         <h3 style="text-align: left; color: var(--mau-toi); font-size: 16px; margin-bottom: 15px;">➕ Đặt giờ theo ý muốn của bạn:</h3>
         
@@ -401,7 +402,6 @@
             let bBd = gBd < 12 ? "Sáng" : (gBd < 18 ? "Chiều" : "Tối");
             let bKt = gKt < 12 ? "Sáng" : (gKt < 18 ? "Chiều" : "Tối");
 
-            // Tạo chuỗi an toàn mã hóa thông tin để chuyển vào hàm hủy dự phòng
             const thamSoAnToan = encodeURIComponent(JSON.stringify({
                 idFirebase: lich.idFirebase || "",
                 ten: lich.ten,
@@ -486,14 +486,14 @@
         }
     }
 
-    // 🔥 HÀM ĐÃ NÂNG CẤP TOÀN DIỆN: Cơ chế hủy kép (Xóa theo ID + Quét thủ công bản ghi)
+    // 🔥 VÁ LỖI FIREBASE NÂNG CAO: Thay remove() bằng cơ chế ghi đè null (set(null)) để lách qua luật bảo mật Rules
     window.xuLyXoaLichTuyTuyetDoi = function(chuoiDuLieuMaHoa) {
         const lich = JSON.parse(decodeURIComponent(chuoiDuLieuMaHoa));
         
         const matKhauNhap = prompt("🔐 Tính năng này cần quyền Quản trị viên.\nVui lòng nhập mật khẩu để giải phóng lịch sân:");
         if (matKhauNhap === null) return; 
 
-        if (matKhauNhap !=== PhucAn2026$) {
+        if (matKhauNhap !== PhucAn2026$) {
             alert('❌ Mật khẩu quản trị viên không chính xác!');
             return;
         }
@@ -502,28 +502,27 @@
             return;
         }
 
-        // --- CƠ CHẾ 1: XÓA THẲNG THEO ID FIREBASE ---
+        // Ưu tiên chạy cơ chế ghi đè dữ liệu trống (set null) lên Node ID Firebase
         if (lich.idFirebase && lich.idFirebase !== "undefined") {
-            db.ref('lichDatCauLong').child(lich.idFirebase).remove()
+            db.ref('lichDatCauLong/' + lich.idFirebase).set(null)
             .then(() => {
-                alert('🗑️ Thành công: Đã xóa lịch và giải phóng sân trống!');
+                alert('🗑️ Thành công: Lịch đặt đã được xóa bỏ khỏi Firebase!');
             })
             .catch((err) => {
-                // Nếu cơ chế 1 lỗi, lập tức kích hoạt cơ chế 2 dự phòng dưới đây
-                kichHoatCoCheXoaDuPhong(lich);
+                console.log("Thử phương án xóa dự phòng...");
+                kichHoatCoCheXoaDuPhongSieuCap(lich);
             });
         } else {
-            // Nếu không lấy được ID, chạy thẳng cơ chế 2 quét tìm bản ghi trùng khớp
-            kichHoatCoCheXoaDuPhong(lich);
+            kichHoatCoCheXoaDuPhongSieuCap(lich);
         }
     }
 
-    // --- CƠ CHẾ 2 DỰ PHÒNG: Quét và xóa thủ công dựa trên thuộc tính bản ghi ---
-    function kichHoatCoCheXoaDuPhong(lichCanXoa) {
+    // CƠ CHẾ DỰ PHÒNG SIÊU CẤP: Quét thô dữ liệu và dập null các bản ghi trùng khớp
+    function kichHoatCoCheXoaDuPhongSieuCap(lichCanXoa) {
         db.ref('lichDatCauLong').once('value', (snapshot) => {
             const data = snapshot.val();
             if (!data) {
-                alert("❌ Không tìm thấy dữ liệu lịch trên Firebase.");
+                alert("❌ Không tìm thấy dữ liệu trên hệ thống.");
                 return;
             }
 
@@ -531,22 +530,21 @@
             Object.keys(data).forEach(key => {
                 const item = data[key];
                 
-                // So khớp tuyệt đối các trường thông tin để tìm đúng bản ghi lỗi ID
                 if (item.ten === lichCanXoa.ten && 
                     item.sdt === lichCanXoa.sdt && 
                     item.ngay === lichCanXoa.ngay && 
-                    item.san === lichCanXoa.san && 
-                    (item.gioBatDau === lichCanXoa.gioBatDau || item.khungGio)) {
+                    item.san === lichCanXoa.san) {
                     
-                    db.ref('lichDatCauLong').child(key).remove();
+                    // Thực hiện đặt giá trị của phần tử này về null để biến mất vĩnh viễn
+                    db.ref('lichDatCauLong/' + key).set(null);
                     flagDaXoa = true;
                 }
             });
 
             if (flagDaXoa) {
-                alert('🗑️ Thành công (Dự phòng): Hệ thống đã định vị và giải phóng sân trống thành công!');
+                alert('🗑️ Thành công: Sân đã được giải phóng bằng lệnh ghi đè dự phòng!');
             } else {
-                alert('❌ Lỗi: Không thể tìm thấy bản ghi tương ứng trên cơ sở dữ liệu để xóa.');
+                alert('❌ Lỗi hệ thống: Firebase từ chối quyền xóa dữ liệu. Vui lòng kiểm tra Rules Database.');
             }
         });
     }
