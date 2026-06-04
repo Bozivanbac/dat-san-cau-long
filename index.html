@@ -14,7 +14,8 @@
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border: #334155;
-            --highlight: #f59e0b; /* Màu vàng cam để làm nổi bật */
+            --highlight: #f59e0b;
+            --success: #10b981;
         }
         body { 
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; 
@@ -28,7 +29,7 @@
             max-width: 480px; 
             margin: auto; 
             background: var(--card-bg); 
-            padding: 30px 20px; 
+            padding: 25px 20px; 
             border-radius: 24px; 
             box-shadow: 0 20px 40px rgba(0,0,0,0.3); 
             border: 1px solid var(--border);
@@ -36,7 +37,7 @@
         h1 { 
             color: var(--text-main); 
             text-align: center; 
-            font-size: 1.6em; 
+            font-size: 1.5em; 
             margin-top: 0;
             margin-bottom: 20px; 
             font-weight: 800;
@@ -46,6 +47,38 @@
             justify-content: center;
             gap: 8px;
         }
+        
+        /* THANH MENU ĐIỀU HƯỚNG HIỆN ĐẠI */
+        .tab-navigation {
+            display: flex;
+            background: #111827;
+            padding: 6px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 700;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: #0f172a;
+        }
+
+        /* KHUNG NỘI DUNG TABS */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
         .hotline-box { 
             background: rgba(56, 189, 248, 0.08); 
             color: var(--primary); 
@@ -65,9 +98,7 @@
             font-weight: 700;
             display: inline-block;
             margin-top: 4px;
-            transition: transform 0.2s;
         }
-        .hotline-box a:active { transform: scale(0.98); }
         
         .box { 
             background: rgba(255,255,255,0.02); 
@@ -107,28 +138,21 @@
             box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
         }
 
-        /* THIẾT KẾ RIÊNG CHO Ô CHỌN NGÀY TO, NỔI BẬT */
         input[type="date"] {
-            padding: 18px 15px; /* Làm ô cao và to hơn hẳn */
-            font-size: 1.2em;    /* Chữ ngày tháng to rõ ràng */
+            padding: 18px 15px; 
+            font-size: 1.2em;    
             font-weight: 700;
-            color: var(--highlight); /* Màu chữ vàng cam nổi bật */
-            border: 2px solid rgba(245, 158, 11, 0.4); /* Viền vàng cam */
+            color: var(--highlight); 
+            border: 2px solid rgba(245, 158, 11, 0.4); 
             background: #0f172a;
             cursor: pointer;
         }
-        input[type="date"]:focus {
-            border-color: var(--highlight);
-            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
-        }
-        /* Tùy chỉnh icon lịch mặc định của trình duyệt cho sáng và rõ hơn */
         input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(75%) sepia(80%) saturate(1000%) hue-rotate(340deg); /* Chuyển icon lịch sang màu vàng cam sáng */
-            transform: scale(1.4); /* Phóng to icon lịch */
-            cursor: pointer;
+            filter: invert(75%) sepia(80%) saturate(1000%) hue-rotate(340deg); 
+            transform: scale(1.4); 
         }
         
-        button { 
+        .action-btn { 
             width: 100%; 
             padding: 15px; 
             background: var(--primary); 
@@ -140,7 +164,7 @@
             cursor: pointer; 
             transition: all 0.2s;
         }
-        button:active { transform: scale(0.98); }
+        .action-btn:active { transform: scale(0.98); }
         
         .time-section { margin: 20px 0; }
         .time-section label { color: var(--text-main); font-size: 0.95em; margin-bottom: 10px; }
@@ -154,12 +178,6 @@
             cursor: pointer; 
             color: var(--text-main); 
             font-weight: 600; 
-            transition: all 0.2s;
-        }
-        .chip:hover, .chip:active {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: rgba(56, 189, 248, 0.05);
         }
         
         .section-title {
@@ -179,7 +197,6 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             margin-bottom: 10px;
-            font-size: 0.95em;
         }
         .list-item b { color: var(--primary); }
         
@@ -190,13 +207,34 @@
             border-top: 1px dashed var(--border); 
         }
         .qr-section div { font-size: 0.95em; font-weight: 600; margin-bottom: 15px; color: var(--text-muted); }
-        .qr-section img { 
-            width: 140px; 
-            height: 140px; 
-            border: 4px solid var(--border); 
-            border-radius: 16px; 
-            padding: 5px;
-            background: white;
+        .qr-section img { width: 140px; height: 140px; border: 4px solid var(--border); border-radius: 16px; padding: 5px; background: white; }
+
+        /* CSS PHẦN BẢNG GIÁ VÀ NỘI QUY */
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed var(--border);
+        }
+        .price-tag {
+            color: var(--highlight);
+            font-weight: 700;
+        }
+        .promo-box {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 15px;
+            border-radius: 14px;
+            margin-top: 15px;
+        }
+        .rule-item {
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+        .rule-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
         }
     </style>
 </head>
@@ -205,51 +243,111 @@
 <div class="card">
     <h1><span>🏸</span> PHÚC AN BADMINTON</h1>
     
-    <div class="hotline-box">
-        Hủy/Đổi sân gọi ngay:<br>
-        <a href="tel:0395936865">☎ 0395.936.865</a>
+    <!-- THANH DIỀU HƯỚNG TABS -->
+    <div class="tab-navigation">
+        <button class="tab-btn active" onclick="switchTab('dat-san')">📝 ĐẶT SÂN</button>
+        <button class="tab-btn" onclick="switchTab('bang-gia')">💵 BẢNG GIÁ</button>
+        <button class="tab-btn" onclick="switchTab('noi-quy')">📋 NỘI QUY</button>
     </div>
 
-    <div class="box">
-        <h3 style="margin-top:0; color:var(--primary);">THÔNG TIN KHÁCH HÀNG</h3>
-        <label>Họ và tên</label>
-        <input type="text" id="hoTen" placeholder="Nhập họ và tên khách">
-        <label>Số điện thoại</label>
-        <input type="tel" id="sdt" placeholder="Nhập chính xác 10 chữ số">
-        <button onclick="luuThongTin()" style="background: #334155; color: var(--text-main); margin-top: 5px;">Lưu thông tin</button>
+    <!-- TAB 1: ĐẶT SÂN -->
+    <div id="dat-san" class="tab-content active">
+        <div class="hotline-box">
+            Hủy/Đổi sân gọi ngay:<br>
+            <a href="tel:0395936865">☎ 0395.936.865</a>
+        </div>
+
+        <div class="box">
+            <h3 style="margin-top:0; color:var(--primary);">THÔNG TIN KHÁCH HÀNG</h3>
+            <label>Họ và tên</label>
+            <input type="text" id="hoTen" placeholder="Nhập họ và tên khách">
+            <label>Số điện thoại</label>
+            <input type="tel" id="sdt" placeholder="Nhập chính xác 10 chữ số">
+            <button onclick="luuThongTin()" style="background: #334155; color: var(--text-main); margin-top: 5px; width:100%; padding:12px; border:none; border-radius:12px; font-weight:700; cursor:pointer;">Lưu thông tin</button>
+        </div>
+
+        <label>Chọn Sân</label>
+        <select id="san" onchange="loadLich()"><option>Sân số 1</option><option>Sân số 2</option></select>
+        
+        <label style="color: var(--highlight); font-weight: 700;">📅 BẤM VÀO ĐÂY ĐỂ CHỌN NGÀY ĐẶT SÂN:</label>
+        <input type="date" id="ngay" onchange="loadLich()">
+        
+        <div class="time-section">
+            <label>☀️ Ca Sáng (Mỗi ca 2 tiếng):</label>
+            <div class="time-chips">
+                <span class="chip" onclick="chonGio('05h-07h')">05h - 07h</span>
+                <span class="chip" onclick="chonGio('07h-09h')">07h - 09h</span>
+                <span class="chip" onclick="chonGio('09h-11h')">09h - 11h</span>
+            </div>
+        </div>
+
+        <div class="time-section">
+            <label>🌙 Ca Tối (Mỗi ca 2 tiếng):</label>
+            <div class="time-chips">
+                <span class="chip" onclick="chonGio('17h-19h')">17h - 19h</span>
+                <span class="chip" onclick="chonGio('19h-21h')">19h - 21h</span>
+                <span class="chip" onclick="chonGio('21h-23h')">21h - 23h</span>
+            </div>
+        </div>
+        
+        <label>Hoặc nhập giờ tự chọn</label>
+        <input type="text" id="thoiGian" placeholder="Ví dụ: 17h30-19h31">
+        <button class="action-btn" onclick="datSan()" style="margin-top:5px; background: linear-gradient(135deg, var(--primary), #0ea5e9);">XÁC NHẬN ĐẶT SÂN</button>
+
+        <div class="section-title">Lịch đã đặt</div>
+        <div id="danhSach"></div>
     </div>
 
-    <label>Chọn Sân</label>
-    <select id="san" onchange="loadLich()"><option>Sân số 1</option><option>Sân số 2</option></select>
-    
-    <label style="color: var(--highlight); font-weight: 700;">📅 BẤM VÀO ĐÂY ĐỂ CHỌN NGÀY ĐẶT SÂN:</label>
-    <input type="date" id="ngay" onchange="loadLich()">
-    
-    <div class="time-section">
-        <label>☀️ Ca Sáng (Mỗi ca 2 tiếng):</label>
-        <div class="time-chips">
-            <span class="chip" onclick="chonGio('05h-07h')">05h - 07h</span>
-            <span class="chip" onclick="chonGio('07h-09h')">07h - 09h</span>
-            <span class="chip" onclick="chonGio('09h-11h')">09h - 11h</span>
+    <!-- TAB 2: BẢNG GIÁ (Từ ảnh 1) -->
+    <div id="bang-gia" class="tab-content">
+        <div class="box">
+            <h3 style="color: var(--primary); margin-top: 0; border-bottom: 1px solid var(--border); padding-bottom: 8px;">📆 TỪ THỨ 2 ĐẾN THỨ 6</h3>
+            <div class="price-row"><span>☀️ 5h - 9h</span><span class="price-tag">70k / Giờ</span></div>
+            <div class="price-row"><span>🔆 9h - 16h</span><span class="price-tag">60k / Giờ</span></div>
+            <div class="price-row"><span>🌙 16h - 22h</span><span class="price-tag">70k / Giờ</span></div>
+        </div>
+
+        <div class="box">
+            <h3 style="color: var(--highlight); margin-top: 0; border-bottom: 1px solid var(--border); padding-bottom: 8px;">🔥 THỨ 7 & CHỦ NHẬT</h3>
+            <div class="price-row"><span>☀️ 5h - 22h</span><span class="price-tag">70k / Giờ</span></div>
+        </div>
+
+        <div class="promo-box">
+            <h3 style="color: var(--success); margin-top: 0; font-size: 1.05em;">🎁 CHƯƠNG TRÌNH KHUYẾN MÃI</h3>
+            <p style="font-size: 0.95em; margin: 8px 0;">🎓 <b>Học sinh, Sinh viên:</b> Chỉ <span style="color:var(--success); font-weight:700;">39k/Giờ</span> (Khung giờ 5h-17h, T2-T6)</p>
+            <p style="font-size: 0.95em; margin: 8px 0;">🤝 <b>Khách đặt sân cố định:</b> Giảm ngay <span style="color:var(--success); font-weight:700;">15%</span></p>
+        </div>
+        
+        <p style="font-size:0.85em; color:var(--text-muted); text-align:center; margin-top:20px;">📍 <b>Địa chỉ:</b> Tổ 1, khu phố 9, Chánh Phú Hoà, Hồ Chí Minh</p>
+    </div>
+
+    <!-- TAB 3: NỘI QUY (Từ ảnh 2) -->
+    <div id="noi-quy" class="tab-content">
+        <div class="box" style="padding: 20px 15px;">
+            <div class="rule-item">
+                <div class="rule-title">1. Giày và vợt:</div>
+                <div style="font-size: 0.95em; color: var(--text-main);">Không đi giày đế cứng, đế màu đen vào sân. Khuyến khích sử dụng giày chuyên dụng thi đấu bộ môn cầu lông.</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title">2. Trẻ em:</div>
+                <div style="font-size: 0.95em; color: var(--text-main);">Khi có trẻ nhỏ đi cùng, phải tự quản lý trẻ, tránh để trẻ chạy vào sân khi có người đang chơi, gây mất an toàn cho trẻ và người chơi.</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title">3. Thuê sân:</div>
+                <div style="font-size: 0.95em; color: var(--text-main);">Liên hệ thuê sân tại quầy, thuê sân nào tập sân đó, vào sân tập không mở đèn vẫn tính tiền .v.v... do chi phí vệ sinh và bảo trì sân.</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title">4. Tài sản và vệ sinh:</div>
+                <div style="font-size: 0.95em; color: var(--text-main);">Tự bảo quản tài sản cá nhân, giữ gìn vệ sinh chung thực hiện nếp sống văn minh nơi công cộng.</div>
+            </div>
+            <div class="rule-item" style="margin-bottom: 0;">
+                <div class="rule-title" style="color: var(--accent);">5. Cấm:</div>
+                <div style="font-size: 0.95em; color: var(--text-main); font-weight: 600;">Không hút thuốc và dùng chất kích thích.</div>
+            </div>
         </div>
     </div>
 
-    <div class="time-section">
-        <label>🌙 Ca Tối (Mỗi ca 2 tiếng):</label>
-        <div class="time-chips">
-            <span class="chip" onclick="chonGio('17h-19h')">17h - 19h</span>
-            <span class="chip" onclick="chonGio('19h-21h')">19h - 21h</span>
-            <span class="chip" onclick="chonGio('21h-23h')">21h - 23h</span>
-        </div>
-    </div>
-    
-    <label>Hoặc nhập giờ tự chọn</label>
-    <input type="text" id="thoiGian" placeholder="Ví dụ: 17h30-19h31">
-    <button onclick="datSan()" style="margin-top:5px; background: linear-gradient(135deg, var(--primary), #0ea5e9);">XÁC NHẬN ĐẶT SÂN</button>
-
-    <div class="section-title">Lịch đã đặt</div>
-    <div id="danhSach"></div>
-
+    <!-- PHẦN QR ĐỂ CUỐI CHUNG -->
     <div class="qr-section">
         <div>Quét mã tham gia nhóm Zalo</div>
         <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://zalo.me/g/xfpsrdyei8f0nnhza8tu" alt="QR Zalo">
@@ -263,21 +361,24 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    // HÀM CHUYỂN ĐỔI QUA LẠI GIỮA CÁC TRANG (TABS)
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
     function chonGio(g) { document.getElementById('thoiGian').value = g; }
     
     function luuThongTin() {
         const hoTen = document.getElementById('hoTen').value.trim();
         const sdt = document.getElementById('sdt').value.trim();
 
-        if (!hoTen) {
-            return alert("❌ Bạn chưa nhập Họ và tên khách!");
-        }
-        if (!sdt) {
-            return alert("❌ Bạn chưa nhập Số điện thoại!");
-        }
-        if (!/^\d{10}$/.test(sdt)) {
-            return alert("❌ Số điện thoại không hợp lệ! Vui lòng nhập chính xác 10 chữ số.");
-        }
+        if (!hoTen) return alert("❌ Bạn chưa nhập Họ và tên khách!");
+        if (!sdt) return alert("❌ Bạn chưa nhập Số điện thoại!");
+        if (!/^\d{10}$/.test(sdt)) return alert("❌ Số điện thoại không hợp lệ! Vui lòng nhập chính xác 10 chữ số.");
 
         localStorage.setItem('user', JSON.stringify({hoTen: hoTen, sdt: sdt}));
         alert("Thông tin của bạn đã được lưu thành công!");
@@ -334,8 +435,8 @@
                 let l = c.val();
                 if(l.san == san && l.ngay == ngay) {
                     let info = isAdmin ? `| 📞 ${l.sdt}` : "";
-                    html += `<div class="list-item"><span><b>${l.thoiGian}</b> | ${l.ten} ${info}</span>
-                             <button style="background:var(--accent); color: white; width:auto; padding:6px 14px; border-radius:8px;" onclick="huy('${c.key}')">Hủy</button></div>`;
+                    html += `<div class="list-item"><span style="font-size:0.95em;"><b>${l.thoiGian}</b> | ${l.ten} ${info}</span>
+                             <button style="background:var(--accent); color: white; width:auto; padding:6px 14px; border:none; border-radius:8px; font-weight:700; cursor:pointer;" onclick="huy('${c.key}')">Hủy</button></div>`;
                 }
             });
             document.getElementById('danhSach').innerHTML = html || "<p style='text-align:center; color:var(--text-muted); padding: 10px 0;'>Sân trống</p>";
