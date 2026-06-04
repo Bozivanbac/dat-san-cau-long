@@ -5,26 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PHÚC AN BADMINTON</title>
     <style>
-        /* Bảng màu theo phong cách logo IMG_0202.JPG */
-        :root { 
-            --primary: #0056b3; 
-            --bg: #eef2f7; 
-            --card: #ffffff;
-            --accent: #ff4757;
-        }
+        :root { --primary: #0056b3; --accent: #ff4757; --bg: #eef2f7; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 15px; }
-        .card { max-width: 500px; margin: auto; background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 5px solid var(--primary); }
-        h1 { color: var(--primary); text-align: center; font-size: 1.5em; margin-bottom: 20px; }
+        .card { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid var(--primary); }
+        h1 { color: var(--primary); text-align: center; font-size: 1.5em; margin-bottom: 10px; }
+        /* Hotline nổi bật */
+        .hotline-box { background: #e8f4fd; color: var(--primary); padding: 12px; border-radius: 12px; text-align: center; font-weight: bold; margin-bottom: 20px; border: 1px solid var(--primary); }
+        .hotline-box a { color: var(--primary); text-decoration: none; font-size: 1.1em; }
         
-        /* Layout */
         .box { background: #f8fbff; border: 1px solid #d1e3f8; padding: 15px; border-radius: 15px; margin-bottom: 15px; }
         input, select { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #cce0f5; border-radius: 10px; box-sizing: border-box; }
         button { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
         
-        /* Phần QR Code dựa trên IMG_0170.JPG */
         .qr-section { margin-top: 25px; text-align: center; padding: 15px; border-top: 1px dashed var(--primary); }
-        .qr-img { width: 120px; height: 120px; margin-top: 10px; border-radius: 10px; border: 2px solid var(--primary); }
-        
         .list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
     </style>
 </head>
@@ -33,6 +26,12 @@
 <div class="card">
     <h1>🏸 PHÚC AN BADMINTON</h1>
     
+    <!-- Hotline hỗ trợ -->
+    <div class="hotline-box">
+        Hủy/Đổi sân gọi ngay:<br>
+        <a href="tel:0395936865">☎ 0395.936.865</a>
+    </div>
+
     <div class="box">
         <h3 style="margin-top:0; color:var(--primary);">THÔNG TIN KHÁCH</h3>
         <input type="text" id="hoTen" placeholder="Họ và tên khách">
@@ -44,24 +43,19 @@
     <select id="san" onchange="loadLich()"><option>Sân số 1</option><option>Sân số 2</option></select>
     <input type="date" id="ngay" onchange="loadLich()">
     
-    <input type="text" id="thoiGian" placeholder="Nhập giờ (Ví dụ: 18h-19h30)">
+    <label>Khung giờ</label>
+    <input type="text" id="thoiGian" placeholder="Ví dụ: 18h00 - 19h30">
     <button onclick="datSan()" style="margin-top:10px;">XÁC NHẬN ĐẶT SÂN</button>
 
     <h3 style="margin-top:25px;">Lịch đã đặt:</h3>
     <div id="danhSach"></div>
 
-    <!-- Chèn QR Code -->
+    <!-- QR Code Zalo -->
     <div class="qr-section">
-        <div style="font-weight:bold; color:var(--primary);">Nhóm chính thức của sân</div>
-        <!-- Bạn hãy thay link ảnh QR thật của bạn vào đây -->
-        <div class="qr-section" style="margin-top: 25px; text-align: center; padding: 15px; border-top: 1px dashed var(--primary);">
-    <div style="font-weight:bold; color:var(--primary); margin-bottom:10px;">Quét mã tham gia nhóm Zalo</div>
-    <!-- QR được tạo tự động để không bao giờ bị lỗi link ảnh -->
-    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=LINK_ZALO_CUA_BAN_O_DAY" 
-         style="width:150px; height:150px; border: 3px solid var(--primary); border-radius:10px;" 
-         alt="QR Zalo">
-    <p style="font-size:0.8em; color:#666; margin-top:10px;">Quét mã để cập nhật tin tức mới nhất nha</p>
-</div>
+        <div style="font-weight:bold; color:var(--primary); margin-bottom:10px;">Quét mã tham gia nhóm Zalo</div>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=LINK_NHOM_ZALO_CUA_BAN" 
+             style="width:140px; height:140px; border: 3px solid var(--primary); border-radius:10px;" alt="QR Zalo">
+    </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -73,15 +67,14 @@
 
     function luuThongTin() {
         localStorage.setItem('user', JSON.stringify({hoTen: document.getElementById('hoTen').value, sdt: document.getElementById('sdt').value}));
-        alert("Đã lưu thông tin!");
+        alert("Thông tin đã được lưu!");
     }
 
     function datSan() {
         const user = JSON.parse(localStorage.getItem('user'));
         const thoiGian = document.getElementById('thoiGian').value;
-        if(!user || !user.hoTen) return alert("Vui lòng lưu thông tin trước!");
-        if(!thoiGian) return alert("Nhập giờ đặt đi bạn ơi!");
-        
+        if(!user || !user.hoTen) return alert("Vui lòng lưu thông tin khách trước!");
+        if(!thoiGian) return alert("Vui lòng nhập khung giờ!");
         db.ref('lichDatCauLong').push({
             ten: user.hoTen, sdt: user.sdt,
             san: document.getElementById('san').value,
