@@ -49,7 +49,6 @@ HTML
             gap: 8px;
         }
         
-        /* THANH MENU ĐIỀU HƯỚNG HIỆN ĐẠI */
         .tab-navigation {
             display: flex;
             background: #111827;
@@ -76,7 +75,6 @@ HTML
             color: #0f172a;
         }
 
-        /* KHUNG NỘI DUNG TABS */
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
@@ -210,7 +208,6 @@ HTML
         .qr-section div { font-size: 0.95em; font-weight: 600; margin-bottom: 15px; color: var(--text-muted); }
         .qr-section img { width: 140px; height: 140px; border: 4px solid var(--border); border-radius: 16px; padding: 5px; background: white; }
 
-        /* CSS PHẦN BẢNG GIÁ VÀ NỘI QUY */
         .price-row {
             display: flex;
             justify-content: space-between;
@@ -242,7 +239,7 @@ HTML
 <body>
 
 <div class="card">
-    <h1><span>🏸</span> PHÚC AN BADMINTON</h1>
+    <h1 onclick="kichHoatAdmin()"><span>🏸</span> PHÚC AN BADMINTON</h1>
     
     <div class="tab-navigation">
         <button class="tab-btn active" onclick="switchTab(event, 'dat-san')">📝 ĐẶT SÂN</button>
@@ -252,7 +249,7 @@ HTML
 
     <div id="dat-san" class="tab-content active">
         <div class="hotline-box">
-            Hủy/Đổi sân gọi ngay:<br>
+            Hủy/Đổi sân gặp sự cố gọi ngay:<br>
             <a href="tel:0395936865">☎ 0395.936.865</a>
         </div>
 
@@ -326,22 +323,18 @@ HTML
         <div class="box" style="padding: 20px 15px;">
             <div class="rule-item">
                 <div class="rule-title">1. Giày và vợt:</div>
-                <div style="font-size: 0.95em; color: var(--text-main);">Không đi giày đế cứng, đế màu đen vào sân. Khuyến khích sử dụng giày chuyên dụng thi đấu bộ môn cầu lông.</div>
+                <div style="font-size: 0.95em; color: var(--text-main);">Không đi giày đế cứng, đế màu đen vào sân.</div>
             </div>
             <div class="rule-item">
                 <div class="rule-title">2. Trẻ em:</div>
-                <div style="font-size: 0.95em; color: var(--text-main);">Khi có trẻ nhỏ đi cùng, phải tự quản lý trẻ, tránh để trẻ chạy vào sân khi có người đang chơi, gây mất an toàn cho trẻ và người chơi.</div>
+                <div style="font-size: 0.95em; color: var(--text-main);">Tự quản lý trẻ đi cùng để đảm bảo an toàn.</div>
             </div>
             <div class="rule-item">
                 <div class="rule-title">3. Thuê sân:</div>
-                <div style="font-size: 0.95em; color: var(--text-main);">Liên hệ thuê sân tại quầy, thuê sân nào tập sân đó, vào sân tập không mở đèn vẫn tính tiền .v.v... do chi phí vệ sinh và bảo trì sân.</div>
-            </div>
-            <div class="rule-item">
-                <div class="rule-title">4. Tài sản và vệ sinh:</div>
-                <div style="font-size: 0.95em; color: var(--text-main);">Tự bảo quản tài sản cá nhân, giữ gìn vệ sinh chung thực hiện nếp sống văn minh nơi công cộng.</div>
+                <div style="font-size: 0.95em; color: var(--text-main);">Vào sân tập không mở đèn vẫn tính tiền theo quy định bảo trì.</div>
             </div>
             <div class="rule-item" style="margin-bottom: 0;">
-                <div class="rule-title" style="color: var(--accent);">5. Cấm:</div>
+                <div class="rule-title" style="color: var(--accent);">4. Cấm:</div>
                 <div style="font-size: 0.95em; color: var(--text-main); font-weight: 600;">Không hút thuốc và dùng chất kích thích.</div>
             </div>
         </div>
@@ -367,11 +360,9 @@ HTML
     let currentLocalDateStr = "";
     let firebaseListener = null;
 
-    // Cấu hình mã Bot Telegram trực tiếp từ trình duyệt web
     const TELEGRAM_BOT_TOKEN = "8696303368:AAGRsaclHC8BcpIsdXtZ1xGmXA6mRERJ7oQ";
     const TELEGRAM_CHAT_ID = "8349164896";
 
-    // Hàm gửi tin nhắn tự động lên Telegram
     function guiThongBaoTelegram(noiDung) {
         const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
         fetch(url, {
@@ -382,12 +373,7 @@ HTML
                 text: noiDung,
                 parse_mode: "HTML"
             })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if(!data.ok) console.error("Lỗi Telegram API trả về:", data.description);
-        })
-        .catch(err => console.error("Lỗi kết nối mạng khi gửi Telegram:", err));
+        }).catch(err => console.error("Lỗi Telegram:", err));
     }
 
     function getVNDateString() {
@@ -408,7 +394,6 @@ HTML
         kiemTraVaCapNhatNgayMoi();
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        
         document.getElementById(tabId).classList.add('active');
         event.currentTarget.classList.add('active');
     }
@@ -418,24 +403,31 @@ HTML
     function luuThongTin() {
         const hoTen = document.getElementById('hoTen').value.trim();
         const sdt = document.getElementById('sdt').value.trim();
-
-        if (!hoTen) return alert("❌ Bạn chưa nhập Họ và tên khách!");
-        if (!sdt) return alert("❌ Bạn chưa nhập Số điện thoại!");
-        if (!/^\d{10}$/.test(sdt)) return alert("❌ Số điện thoại không hợp lệ! Vui lòng nhập chính xác 10 chữ số.");
-
+        if (!hoTen || !sdt || !/^\d{10}$/.test(sdt)) return alert("❌ Vui lòng nhập đầy đủ tên và SĐT gồm 10 chữ số.");
         localStorage.setItem('user', JSON.stringify({hoTen: hoTen, sdt: sdt}));
-        alert("Thông tin của bạn đã được lưu thành công!");
+        alert("Thông tin khách đã được lưu!");
     }
 
+    // Chuyển đổi định dạng chuỗi giờ (Ví dụ: 17h30 hoặc 17:30) thành số phút từ đầu ngày
     function toMinutes(timeStr) {
         let cleanTime = timeStr.toLowerCase().trim().replace('g', ':').replace('h', ':');
-        if (!cleanTime.includes(':')) {
-            cleanTime += ':00';
-        }
+        if (!cleanTime.includes(':')) cleanTime += ':00';
         let parts = cleanTime.split(':');
         let h = parseInt(parts[0], 10) || 0;
         let m = parseInt(parts[1], 10) || 0;
         return (h * 60) + m;
+    }
+
+    // Hàm kích hoạt quyền Admin kín (Bấm vào tiêu đề lớn chữ PHÚC AN BADMINTON)
+    function kichHoatAdmin() {
+        let pass = prompt("Nhập mã Admin để cấu hình thiết bị:");
+        if (pass === "PhucAn2026$") {
+            localStorage.setItem('isAdmin', 'true');
+            alert("🔑 Đã kích hoạt quyền Admin trên trình duyệt này!");
+            loadLich();
+        } else if (pass !== null) {
+            alert("Sai mã cấu hình!");
+        }
     }
 
     function datSan() {
@@ -445,38 +437,53 @@ HTML
         const san = document.getElementById('san').value;
         const ngay = document.getElementById('ngay').value;
 
-        if(!user || !user.hoTen || !user.sdt) return alert("❌ Vui lòng điền và bấm 'Lưu thông tin' ở trên trước khi đặt sân!");
+        if(!user || !user.hoTen || !user.sdt) return alert("❌ Vui lòng điền và bấm 'Lưu thông tin' ở trên trước khi đặt!");
         if(!thoiGian || !thoiGian.includes('-')) return alert("Vui lòng nhập giờ dạng: 17h30-19h30");
 
         const [startStr, endStr] = thoiGian.split('-');
-        if(!startStr || !endStr) return alert("❌ Định dạng thời gian không hợp lệ!");
-        
         const newStart = toMinutes(startStr);
         const newEnd = toMinutes(endStr);
 
         if(newStart >= newEnd) return alert("❌ Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc!");
 
+        // --- TÍNH NĂNG 1: CHẶN ĐẶT KHUNG GIỜ ĐÃ TRÔI QUA TRONG NGÀY ---
+        const ngayHienTai = getVNDateString();
+        if (ngay === ngayHienTai) {
+            const gioHienTai = new Date();
+            const phutHienTaiSystem = (gioHienTai.getHours() * 60) + gioHienTai.getMinutes();
+            if (newStart < phutHienTaiSystem) {
+                return alert("❌ Không thể đặt sân khung giờ đã trôi qua trong ngày hôm nay!");
+            }
+        } else if (ngay < ngayHienTai) {
+            return alert("❌ Không thể chọn đặt lịch cho những ngày trong quá khứ!");
+        }
+
+        // --- TÍNH NĂNG 2: KIỂM TRA TRÙNG LỊCH TUYỆT ĐỐI THEO PHÚT ---
         db.ref('lichDatCauLong').orderByChild('ngay').equalTo(ngay).once('value', (snap) => {
             let isOverlapping = false;
             snap.forEach(c => {
                 let l = c.val();
                 if(l.san == san) {
                     const [s, e] = l.thoiGian.split('-');
-                    if (newStart < toMinutes(e) && newEnd > toMinutes(s)) isOverlapping = true;
+                    const existingStart = toMinutes(s);
+                    const existingEnd = toMinutes(e);
+                    
+                    // Thuật toán kiểm tra giao nhau: Hai ca đè nhau khi (Bắt đầu ca mới < Kết thúc ca cũ) VÀ (Kết thúc ca mới > Bắt đầu ca cũ)
+                    if (newStart < existingEnd && newEnd > existingStart) {
+                        isOverlapping = true;
+                    }
                 }
             });
 
             if(isOverlapping) {
-                alert("❌ Khung giờ này bị trùng lịch! Vui lòng chọn giờ khác.");
+                alert("❌ Khung giờ này bị trùng lịch hoặc giao nhau với một lịch khác! Vui lòng chọn giờ khác.");
             } else {
                 db.ref('lichDatCauLong').push({
-                    ten: user.hoTen, sdt: user.sdt,
-                    san: san, ngay: ngay, thoiGian: thoiGian
+                    ten: user.hoTen, sdt: user.sdt, san: san, ngay: ngay, thoiGian: thoiGian
                 }).then(() => {
                     alert("✅ Đặt thành công!");
                     document.getElementById('thoiGian').value = '';
                     
-                    // Gửi tin nhắn thông báo về Telegram
                     let tinNhanTelegam = `📝 <b>LỊCH ĐẶT SÂN MỚI</b>\n` +
                                          `━━━━━━━━━━━━━━━━━━\n` +
                                          ` sân: <b>${san}</b>\n` +
@@ -495,9 +502,7 @@ HTML
         const ngay = document.getElementById('ngay').value;
         const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
-        if (firebaseListener) {
-            db.ref('lichDatCauLong').off('value', firebaseListener);
-        }
+        if (firebaseListener) db.ref('lichDatCauLong').off('value', firebaseListener);
 
         firebaseListener = db.ref('lichDatCauLong').orderByChild('ngay').equalTo(ngay).on('value', snap => {
             let htmlSelectSan = ''; 
@@ -511,7 +516,6 @@ HTML
                 if(l.san == san) {
                     htmlSelectSan += `<div class="list-item"><span style="font-size:0.95em;"><b>${l.thoiGian}</b> | ${l.ten} ${info}</span>${buttonHuy}</div>`;
                 }
-
                 htmlAllSan += `<div class="list-item"><span style="font-size:0.95em;"><b style="color:var(--highlight);">${l.san}</b> | <b>${l.thoiGian}</b> | ${l.ten} ${info}</span>${buttonHuy}</div>`;
             });
 
@@ -520,8 +524,8 @@ HTML
         });
     }
 
+    // --- TÍNH NĂNG 3: CHỈ ADMIN MỚI ĐƯỢC QUYỀN HỦY LỊCH ---
     function huy(id) {
-        // Thực hiện bốc dữ liệu lịch để gửi thông báo hủy trước khi xóa hẳn trên Database
         function thucHienHuyVaGuiTin(idXoa) {
             db.ref('lichDatCauLong/' + idXoa).once('value', (snap) => {
                 let l = snap.val();
@@ -532,27 +536,30 @@ HTML
                                      `📅 Ngày hủy: <code>${l.ngay}</code>\n` +
                                      `⏰ Khung giờ: <b>${l.thoiGian}</b>\n` +
                                      `👤 Tên khách cũ: <b>${l.ten}</b>\n` +
-                                     `📢 Trạng thái: <i>Hủy bởi Admin</i>`;
+                                     `📢 Trạng thái: <i>Hủy thành công bởi Admin</i>`;
                     guiThongBaoTelegram(tinNhanHuy);
                 }
                 db.ref('lichDatCauLong/' + idXoa).remove();
             });
         }
 
+        // Nếu thiết bị này đã xác thực mật khẩu Admin từ trước (bằng cách kích hoạt ngầm)
         if (localStorage.getItem('isAdmin') === 'true') {
-            if(confirm("Bạn có chắc chắn muốn hủy lịch đặt này?")) {
+            if(confirm("Xác nhận hành động Admin: Bạn có chắc chắn muốn xóa lịch này không?")) {
                 thucHienHuyVaGuiTin(id);
             }
             return;
         }
 
-        let pass = prompt("Mật khẩu Admin để hủy lịch:");
-        if(pass == "PhucAn2026$") {
-            localStorage.setItem('isAdmin', 'true');
+        // Đối với khách vãng lai thông thường khi bấm nút hủy:
+        alert("⚠️ CHÚ Ý: Tính năng hủy/đổi lịch chỉ dành cho Admin của sân.\n\nNếu bạn gặp sự cố muốn thay đổi giờ chơi, vui lòng liên hệ trực tiếp Hotline của sân: 0395.936.865 để được hỗ trợ kịp thời!");
+        
+        // Hộp thoại xác thực mật khẩu dành riêng cho Admin nếu muốn thao tác nhanh tại máy khách
+        let checkPass = prompt("Nhập mật khẩu Admin quản trị (Nếu bạn là chủ sân):");
+        if (checkPass === "PhucAn2026$") {
             thucHienHuyVaGuiTin(id);
-            loadLich(); 
-        } else if (pass !== null) { 
-            alert("Sai mật khẩu!"); 
+        } else if (checkPass !== null) {
+            alert("Mật khẩu không chính xác! Hành động bị từ chối.");
         }
     }
 
@@ -562,10 +569,8 @@ HTML
             if(document.getElementById('hoTen')) document.getElementById('hoTen').value = user.hoTen; 
             if(document.getElementById('sdt')) document.getElementById('sdt').value = user.sdt; 
         }
-        
         currentLocalDateStr = getVNDateString();
         document.getElementById('ngay').value = currentLocalDateStr;
-        
         loadLich();
         setInterval(kiemTraVaCapNhatNgayMoi, 60000);
     };
