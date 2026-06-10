@@ -343,7 +343,6 @@ HTML
         }).catch(err => console.error("Lỗi Telegram:", err));
     }
 
-    // Lấy chuỗi ngày định dạng VN
     function getVNDateString() {
         const tzoffset = (new Date()).getTimezoneOffset() * 60000;
         return (new Date(Date.now() - tzoffset)).toISOString().slice(0, 10);
@@ -392,15 +391,12 @@ HTML
         });
     }
 
-    // --- 🔄 SỬA ĐỔI: KÉO CHỌN GIỜ TỰ DO - BƯỚC NHẢY 15 PHÚT TÁCH TÁCH ---
     function capNhatGioTuChon() {
-        // Nhả màu chọn ở các ca cố định phía trên khi khách dùng thanh trượt lẻ
         document.querySelectorAll('.wheel-slot').forEach(item => item.classList.remove('selected'));
 
         let startMin = parseInt(document.getElementById('startSlider').value);
         let endMin = parseInt(document.getElementById('endSlider').value);
 
-        // Bảo vệ: Nếu khách kéo Giờ Ra nhỏ hơn hoặc bằng Giờ Vào, tự động ép Giờ Ra tăng lên 15 phút lẻ kế tiếp
         if (startMin >= endMin) {
             endMin = startMin + 15;
             document.getElementById('endSlider').value = endMin;
@@ -412,7 +408,6 @@ HTML
         document.getElementById('startOutput').innerText = startTimeText;
         document.getElementById('endOutput').innerText = endTimeText;
 
-        // Tự động gán thẳng giá trị chuỗi thời gian được chọn ra bộ nhớ lưu trữ chính
         document.getElementById('thoiGian').value = startTimeText + "-" + endTimeText;
     }
 
@@ -459,7 +454,6 @@ HTML
                     slot.classList.add('selected');
                     document.getElementById('thoiGian').value = ca; 
 
-                    // Đồng bộ thanh trượt chạy theo tương ứng khi bấm ca cố định
                     let minStart = toMinutes(s);
                     let minEnd = toMinutes(e);
                     document.getElementById('startSlider').value = minStart;
@@ -498,8 +492,14 @@ HTML
         alert("Thông tin khách đã được lưu!");
     }
 
+    // --- 🛠️ VÁ LỖI LOGIC: TỰ ĐỘNG CHUYỂN ĐỔI CHỮ 'G' HOẶC KÝ TỰ LẠ THÀNH CHUẨN GIỜ CHẠY CODE ---
     function parseSmartTimePiece(piece) {
-        let clean = piece.toLowerCase().trim().replace('g', ':').replace('h', ':').replace('p', '');
+        let clean = piece.toLowerCase().trim()
+                         .replace(/g/g, ':')   // Chuyển toàn bộ chữ 'g' thành dấu ':'
+                         .replace(/h/g, ':')   // Chuyển toàn bộ chữ 'h' thành dấu ':'
+                         .replace(/p/g, '')    // Loại bỏ chữ 'p' thừa
+                         .replace(/sáng/g, '').replace(/chiều/g, '').replace(/tối/g, ''); // Gạt bỏ chữ buổi thừa
+        
         if (!clean.includes(':')) {
             let h = parseInt(clean, 10) || 0;
             return { hour: h, minute: 0 };
