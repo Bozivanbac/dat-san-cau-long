@@ -391,6 +391,7 @@ HTML
         });
     }
 
+    // --- 🛠️ FIX LỖI THANH TRƯỢT TỰ CHỌN GIỜ LẺ ---
     function capNhatGioTuChon() {
         document.querySelectorAll('.wheel-slot').forEach(item => item.classList.remove('selected'));
 
@@ -411,6 +412,7 @@ HTML
         document.getElementById('thoiGian').value = startTimeText + "-" + endTimeText;
     }
 
+    // --- 🛠️ FIX LỖI HÀM DỰNG VÒNG QUAY CHỌN GIỜ ---
     function renderTimeWheel() {
         const sanDangChon = document.getElementById('san').value;
         const ngayDangChon = document.getElementById('ngay').value;
@@ -419,6 +421,7 @@ HTML
         const phutHienTaiSystem = (gioHeThong.getHours() * 60) + gioHeThong.getMinutes();
 
         let container = document.getElementById('timeWheel');
+        if (!container) return;
         container.innerHTML = ""; 
 
         DANH_SACH_CA_CHUAN.forEach(ca => {
@@ -441,10 +444,12 @@ HTML
                 }
             });
 
+            let displayCa = ca.replace(/00/g, ''); // Fix lỗi replace bừa bãi cũ
+
             let slot = document.createElement('div');
             slot.className = `wheel-slot ${isLocked ? 'locked' : ''}`;
             slot.innerHTML = `
-                <span class="slot-time">${ca.replace(/00/g,'')} ${buoi}</span>
+                <span class="slot-time">${displayCa} ${buoi}</span>
                 <span class="slot-status">${statusText}</span>
             `;
 
@@ -492,13 +497,12 @@ HTML
         alert("Thông tin khách đã được lưu!");
     }
 
-    // --- 🛠️ VÁ LỖI LOGIC: TỰ ĐỘNG CHUYỂN ĐỔI CHỮ 'G' HOẶC KÝ TỰ LẠ THÀNH CHUẨN GIỜ CHẠY CODE ---
     function parseSmartTimePiece(piece) {
         let clean = piece.toLowerCase().trim()
-                         .replace(/g/g, ':')   // Chuyển toàn bộ chữ 'g' thành dấu ':'
-                         .replace(/h/g, ':')   // Chuyển toàn bộ chữ 'h' thành dấu ':'
-                         .replace(/p/g, '')    // Loại bỏ chữ 'p' thừa
-                         .replace(/sáng/g, '').replace(/chiều/g, '').replace(/tối/g, ''); // Gạt bỏ chữ buổi thừa
+                         .replace(/g/g, ':')   
+                         .replace(/h/g, ':')   
+                         .replace(/p/g, '')    
+                         .replace(/sáng/g, '').replace(/chiều/g, '').replace(/tối/g, ''); 
         
         if (!clean.includes(':')) {
             let h = parseInt(clean, 10) || 0;
@@ -517,6 +521,7 @@ HTML
         return (parsed.hour * 60) + parsed.minute;
     }
 
+    // Định dạng số phút tổng sang văn bản chuẩn h
     function formatMinutesToText(totalMinutes) {
         let h = Math.floor(totalMinutes / 60); let m = totalMinutes % 60;
         let hStr = h < 10 ? '0' + h : h; let mStr = m < 10 ? '0' + m : m;
