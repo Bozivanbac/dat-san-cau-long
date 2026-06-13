@@ -88,7 +88,7 @@ HTML
         .wheel-slot.selected { border-color: var(--primary); background: rgba(6, 182, 212, 0.03); }
         .wheel-slot.all-locked { background: #111827; opacity: 0.35; cursor: not-allowed; }
 
-        /* GIAO DIỆN CHỌN SÂN Ô NÚT BẤM SONG SONG KHÔNG BỊ LỆCH CHỮ KHUNG */
+        /* GIAO DIỆN CHỌN SÂN */
         .court-tabs-group { display: flex; width: 100%; gap: 10px; margin: 8px 0 16px 0; }
         .court-tab-item { flex: 1; background: #070a12; border: 1px solid var(--border); padding: 14px 5px; border-radius: 14px; text-align: center; font-weight: 800; font-size: 0.95em; color: var(--text-muted); cursor: pointer; transition: all 0.25s ease; user-select: none; white-space: nowrap; }
         .court-tab-item.active { border-color: var(--primary); background: rgba(6, 182, 212, 0.05); color: var(--primary); box-shadow: 0 0 12px rgba(6, 182, 212, 0.15); }
@@ -107,7 +107,7 @@ HTML
         .tech-picker-box.is-error .tech-hud-display { border-color: var(--accent); background: rgba(244, 63, 94, 0.05); }
         .tech-picker-box.is-error .hud-time { color: var(--accent); }
 
-        /* KHỐI KẸP TIMELINE CÓ HIỆU ỨNG MỜ ĐÈN */
+        /* TIMELINE KẸP */
         .sandwich-container { background: #090d16; padding: 15px 10px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.02); margin-top: 10px; }
         .sandwich-row-s1, .sandwich-row-s2 { transition: opacity 0.3s ease; }
         .sandwich-row-s1.dimmed, .sandwich-row-s2.dimmed { opacity: 0.15; filter: blur(0.5px); }
@@ -120,7 +120,7 @@ HTML
         .energy-block:last-child { border-right: none; }
         .energy-block.is-busy { background: var(--accent); }
 
-        /* LÀM TO THANH TRƯỢT VÀ NÚT KÉO */
+        /* THANH TRƯỢT */
         .slider-container-wrapper { padding: 20px 6px; position: relative; z-index: 10; }
         .noUi-target { background: #1e293b !important; border: none !important; border-radius: 50px !important; height: 16px !important; }
         .noUi-connect { background: var(--cyber-gradient) !important; }
@@ -138,7 +138,7 @@ HTML
         .price-label { font-size: 0.8em; color: var(--text-muted); text-transform: uppercase; }
         .price-display { font-family: monospace; font-weight: 900; font-size: 1.8em; color: var(--success); margin-top: 4px; }
 
-        /* THÔNG TIN LIÊN HỆ ĐỔI HỦY */
+        /* LIÊN HỆ ĐỔI HỦY */
         .support-contact-box { text-align: center; font-size: 0.85em; color: var(--text-muted); margin-top: 10px; margin-bottom: 20px; font-weight: 600; }
         .support-contact-box a { color: var(--highlight); text-decoration: none; font-weight: 800; border-bottom: 1px dashed var(--highlight); }
 
@@ -155,41 +155,45 @@ HTML
         .status-ending { background: rgba(249, 115, 22, 0.15); color: #f97316; }
         .status-done { background: rgba(16, 185, 129, 0.15); color: var(--success); }
 
-        /* ZALO QR BOX */
+        /* KHUNG NHÓM ZALO ĐƯỢC PHÓNG TO HÌNH QR */
         .zalo-group-box {
             background: var(--zalo-blue);
-            border-radius: 16px;
-            padding: 25px 20px;
+            border-radius: 20px;
+            padding: 25px 15px;
             text-align: center;
             margin-top: 30px;
             margin-bottom: 15px;
-            box-shadow: 0 10px 25px rgba(0, 104, 255, 0.25);
+            box-shadow: 0 12px 30px rgba(0, 104, 255, 0.3);
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.12);
         }
         .zalo-title {
             color: white;
             font-weight: 900;
-            font-size: 1.15em;
+            font-size: 1.2em;
             margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         .zalo-desc {
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.95);
             font-size: 0.85em;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
             line-height: 1.5;
+            padding: 0 10px;
         }
+        /* PHÓNG TO ẢNH QR LÊN 280PX VÀ CĂN CHỈNH ĐẸP MẮT */
         .zalo-qr-img {
-            width: 160px;
-            height: 160px;
-            border-radius: 12px;
-            border: 4px solid white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            width: 280px;
+            height: 280px;
+            border-radius: 16px;
+            border: 6px solid white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.35);
             object-fit: contain;
             background: white;
+            display: block;
+            margin: 0 auto;
         }
 
         /* BẢNG GIÁ & NỘI QUY */
@@ -306,9 +310,9 @@ HTML
         <div id="tongHopDanhSach"></div>
 
         <div class="zalo-group-box">
-            <div class="zalo-title">Tham Gia Nhóm Zalo CLB</div>
-            <div class="zalo-desc">Quét mã QR để tham gia "CLB Cầu Lông Phúc An BADMINTON" giao lưu, bắt kèo và nhận thông báo mới nhất!</div>
-            <img src="qr.jpg" alt="Mã QR Zalo Phúc An" class="zalo-qr-img">
+            <div class="zalo-title">Tham Gia Nhóm Zalo Phúc An</div>
+            <div class="zalo-desc">Quét mã QR để tham gia nhóm "Sân cầu lông Phúc An Badminton" giao lưu, bắt kèo và nhận thông báo mới nhất!</div>
+            <img src="nhomzalo.jpg" alt="Mã QR Zalo Phúc An" class="zalo-qr-img">
         </div>
     </div>
 
@@ -394,7 +398,6 @@ HTML
         }).catch(err => console.error("Lỗi gửi Telegram:", err));
     }
 
-    /* KÍCH HOẠT SERVICE WORKER CHẠY NGẦM THỰC THỤ CHO MÀN HÌNH KHÓA TẮT */
     if ('serviceWorker' in navigator) {
         const swCode = `
             self.addEventListener('install', function(event) {
@@ -458,7 +461,6 @@ HTML
                 let sMin = toMinutes(l.thoiGian);
                 let eMin = toMinutesEnd(l.thoiGian);
 
-                // 1. Nhắc nhở trước khi lên sân 15 phút (Đã đổi giọng dễ thương)
                 let keyTruoc = l.key + "_reminder_start";
                 if (sMin - phutHienTai <= 15 && sMin - phutHienTai > 0 && !notiHistory[keyTruoc]) {
                     sendSystemNotification(
@@ -470,7 +472,6 @@ HTML
                     localStorage.setItem('notiHistory', JSON.stringify(notiHistory));
                 }
 
-                // 2. Gửi lời cảm ơn sau khi hết ca (Đã đổi giọng dễ mến)
                 let keySau = l.key + "_thanks_end";
                 if (phutHienTai - eMin >= 2 && phutHienTai - eMin <= 10 && !notiHistory[keySau]) {
                     sendSystemNotification(
@@ -485,7 +486,6 @@ HTML
         });
     }
 
-    /* LOGIC THỜI GIAN */
     function getVNDateString() {
         const tzoffset = (new Date()).getTimezoneOffset() * 60000;
         return (new Date(Date.now() - tzoffset)).toISOString().slice(0, 10);
@@ -516,7 +516,6 @@ HTML
         return h < 12 ? "sáng" : (h < 18 ? "chiều" : "tối");
     }
 
-    /* ĐỔI Ô NÚT BẤM CHỌN SÂN VÀ MỜ ĐÈN TIMELINE KÈP */
     function selectCourt(courtName) {
         document.getElementById('selectedCourtValue').value = courtName;
         
@@ -932,7 +931,7 @@ HTML
             if(confirm("Xác nhận xóa lịch này?")) db.ref('lichDatCauLong/' + id).remove();
             return;
         }
-        let checkPass = prompt("Tính năng giới hạn cho Admin. Nhập mật khẩu để tiếp tục:");
+        let checkPass = prompt("Nhập mã Admin:");
         if (checkPass === "PhucAn2026$") { db.ref('lichDatCauLong/' + id).remove(); }
     }
 
@@ -961,7 +960,7 @@ HTML
     function kiemTraVaCapNhatNgayMoi() {
         const ngayMoiNhat = getVNDateString();
         if (currentLocalDateStr !== ngayMoiNhat) {
-            currentLocalDateStr = ngayMoiNhat;
+            currentLocalDateStr = ngayMoiMhat;
             document.getElementById('ngay').value = ngayMoiNhat;
             loadLich();
         }
@@ -987,4 +986,4 @@ HTML
     };
 </script>
 </body>
-</html>A
+</html>
